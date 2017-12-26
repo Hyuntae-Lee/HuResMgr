@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     dialognewjob.cpp \
     job.cpp \
     joblisttablemodelforworker.cpp \
-    joblisttablemodelforworkeritem.cpp
+    joblisttablemodelforworkeritem.cpp \
+    joblisttablemodelforstat.cpp \
+    joblisttablemodelforstatitem.cpp
 
 HEADERS  += mainwindow.h \
     dbhdlr.h \
@@ -35,7 +37,9 @@ HEADERS  += mainwindow.h \
     job.h \
     dialognewjob.h \
     joblisttablemodelforworker.h \
-    joblisttablemodelforworkeritem.h
+    joblisttablemodelforworkeritem.h \
+    joblisttablemodelforstat.h \
+    joblisttablemodelforstatitem.h
 
 FORMS    += mainwindow.ui \
     dialognewworker.ui \

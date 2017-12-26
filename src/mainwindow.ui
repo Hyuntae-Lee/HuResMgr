@@ -31,6 +31,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButton_workNew">
+        <property name="text">
+         <string>업무추가</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushButton">
         <property name="text">
          <string>PushButton</string>
@@ -45,7 +52,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_worker">
        <attribute name="title">
@@ -422,83 +429,53 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
-            <item>
-             <widget class="QLabel" name="label_8">
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="1" column="0">
+             <widget class="QDateEdit" name="dateEdit"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="QDateEdit" name="dateEdit_2"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_9">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
-               <string>목록</string>
+               <string>~</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_workNew">
+            <item row="1" column="4">
+             <widget class="QPushButton" name="pushButton_refreshJobjist">
               <property name="text">
-               <string>추가</string>
+               <string>적용</string>
               </property>
              </widget>
+            </item>
+            <item row="1" column="3">
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
           <item>
-           <widget class="QListView" name="listView_work">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>300</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_7">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>참가자</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_8"/>
           </item>
           <item>
-           <widget class="QListView" name="listView_workerForWork"/>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="groupBox_3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>200</height>
-             </size>
-            </property>
-            <property name="title">
-             <string>GroupBox</string>
-            </property>
-           </widget>
+           <widget class="QTableView" name="tableView_jobListForStat"/>
           </item>
          </layout>
         </item>
