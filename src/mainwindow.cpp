@@ -67,7 +67,7 @@ void MainWindow::on_pushButton_newHR_clicked()
     }
 
     Worker worker;
-    if (!dlg.getWorkInfo(&worker)) {
+    if (!dlg.getWorker(&worker)) {
         return;
     }
 

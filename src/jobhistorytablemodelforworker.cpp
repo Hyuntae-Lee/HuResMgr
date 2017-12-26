@@ -42,12 +42,10 @@ void JobHistoryTableModelForWorker::setWorker(QString rrNum)
     foreach (Job job, jobList) {
         JobHistoryTableModelForWorkerItem modelItem;
 
-        QString workerName = findWorkerNameWithRRNum(job.workerRRNum());
         QString companyName = findCompanyNameWithBlNum(job.companyBlNum());
         int pay = findWorkerPayWithRRNum(job.workerRRNum());
         QDate date = job.date();
 
-        modelItem.setWorkerName(workerName);
         modelItem.setCompanyName(companyName);
         modelItem.setPay(pay);
         modelItem.setDate(date);
@@ -103,7 +101,7 @@ QVariant JobHistoryTableModelForWorker::data(const QModelIndex &index, int role)
         JobHistoryTableModelForWorkerItem item = m_itemList[index.row()];
 
         if (index.column() == COLUMN_DATE) {
-            return item.date();
+            return item.date().toString(Qt::DefaultLocaleLongDate);
         }
 
         if (index.column() == COLUMN_COMPANY) {
@@ -143,19 +141,6 @@ QString JobHistoryTableModelForWorker::findCompanyNameWithBlNum(QString blNum)
         }
 
         return company.name();
-    }
-
-    return "";
-}
-
-QString JobHistoryTableModelForWorker::findWorkerNameWithRRNum(QString rrNum)
-{
-    foreach (Worker worker, m_workerList) {
-        if (worker.rrNum() != rrNum) {
-            continue;
-        }
-
-        return worker.name();
     }
 
     return "";

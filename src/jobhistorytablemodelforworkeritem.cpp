@@ -5,16 +5,6 @@ JobHistoryTableModelForWorkerItem::JobHistoryTableModelForWorkerItem()
 
 }
 
-QString JobHistoryTableModelForWorkerItem::workerName()
-{
-    return m_workerName;
-}
-
-void JobHistoryTableModelForWorkerItem::setWorkerName(QString value)
-{
-    m_workerName = value;
-}
-
 int JobHistoryTableModelForWorkerItem::pay()
 {
     return m_pay;

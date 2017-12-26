@@ -37,7 +37,7 @@ bool DBHdlr::getWorkerList(QList<Worker>& list)
         return false;
     }
 
-    QString queryStr = QString("SELECT id, name, rr_num, major, picture_path, address, phone_num, bank_account FROM Worker");
+    QString queryStr = QString("SELECT id, name, rr_num, major, picture_path, address, phone_num, bank_account, pay FROM Worker");
 
     QSqlQuery query(queryStr);
     if(!query.isActive()) {
@@ -54,6 +54,7 @@ bool DBHdlr::getWorkerList(QList<Worker>& list)
         QString phoneNum = query.value("phone_num").toString();
         QString bankAccount = query.value("bank_account").toString();
         QStringList majorList = query.value("major").toString().split(",");
+        QString payStr = query.value("pay").toString();
 
         Worker worker;
         worker.setIdNum(id_num);
@@ -65,6 +66,15 @@ bool DBHdlr::getWorkerList(QList<Worker>& list)
         worker.setBankAccount(bankAccount);
         foreach(QString major, majorList) {
             worker.addMajor(major);
+        }
+
+        bool ok;
+        int pay = payStr.toInt(&ok);
+        if (ok) {
+            worker.setPay(pay);
+        }
+        else {
+            worker.setPay(0);
         }
 
         list.append(worker);
@@ -79,10 +89,10 @@ bool DBHdlr::addWorker(Worker worker)
         return false;
     }
 
-    QString queryStr = QString("INSERT INTO Worker(rr_num, name, major, picture_path, address, phone_num, bank_account) VALUES('%1','%2','%3','%4','%5','%6','%7')")
+    QString queryStr = QString("INSERT INTO Worker(rr_num, name, major, picture_path, address, phone_num, bank_account, pay) VALUES('%1','%2','%3','%4','%5','%6','%7','%8')")
             .arg(worker.rrNum()).arg(worker.name()).arg(worker.majorStr())
             .arg(worker.picturePath()).arg(worker.address()).arg(worker.phoneNum())
-            .arg(worker.bankAccount());
+            .arg(worker.bankAccount()).arg(QString("%1").arg(worker.pay()));
 
     QSqlQuery query(queryStr);
     if(!query.isActive()) {
@@ -173,7 +183,7 @@ bool DBHdlr::getJobList(QList<Job>& list)
         Job job(id);
         job.setCompanyBlNum(companyBlNum);
         job.setWorkerRRNum(workerRRnum);
-        job.setDate(QDate::fromString(DB_DATE_FORMAT));
+        job.setDate(QDate::fromString(dateStr, DB_DATE_FORMAT));
 
         list.append(job);
     }

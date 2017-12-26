@@ -8,13 +8,21 @@ DialogNewJob::DialogNewJob(QList<Worker> &workerList, QList<Company> &companyLis
     ui->setupUi(this);
 
     m_model_workerList = new QStringListModel;
+    m_model_companyList = new QStringListModel;
     m_workerList.append(workerList);
     m_companyList.append(companyList);
+
+    ui->listView_newJob_worker->setModel(m_model_workerList);
+    ui->listView_newJob_company->setModel(m_model_companyList);
+
+    _init_worker_list();
+    _init_company_list();
 }
 
 DialogNewJob::~DialogNewJob()
 {
     delete m_model_workerList;
+    delete m_model_companyList;
     delete ui;
 }
 
@@ -43,8 +51,6 @@ void DialogNewJob::_init_worker_list()
         itemList.append(lableStr);
     }
     m_model_workerList->setStringList(itemList);
-
-    ui->listView_newJob_worker->setModel(m_model_workerList);
 }
 
 void DialogNewJob::_init_company_list()
@@ -54,6 +60,4 @@ void DialogNewJob::_init_company_list()
         itemList.append(company.name());
     }
     m_model_companyList->setStringList(itemList);
-
-    ui->listView_newJob_company->setModel(m_model_workerList);
 }

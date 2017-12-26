@@ -20,8 +20,6 @@ SOURCES += main.cpp\
     company.cpp \
     dialognewcompany.cpp \
     dialogdatepicker.cpp \
-    participanttablemodel.cpp \
-    participanttablemodelitem.cpp \
     dialognewjob.cpp \
     jobhistorytablemodelforworker.cpp \
     jobhistorytablemodelforworkeritem.cpp \
@@ -34,8 +32,6 @@ HEADERS  += mainwindow.h \
     company.h \
     dialognewcompany.h \
     dialogdatepicker.h \
-    participanttablemodel.h \
-    participanttablemodelitem.h \
     job.h \
     dialognewjob.h \
     jobhistorytablemodelforworker.h \
@@ -44,6 +40,5 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     dialognewworker.ui \
     dialognewcompany.ui \
-    dialognewwork.ui \
     dialogdatepicker.ui \
     dialognewjob.ui

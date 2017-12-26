@@ -27,7 +27,6 @@ public:
 private:
     bool jobListForWorker(QList<Job>& out_list, QString rrNum);
     QString findCompanyNameWithBlNum(QString blNum);
-    QString findWorkerNameWithRRNum(QString rrNum);
     int findWorkerPayWithRRNum(QString rrNum);
 
 private:

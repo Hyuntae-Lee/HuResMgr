@@ -15,7 +15,7 @@ class DialogNewWorker : public QDialog
 public:
     explicit DialogNewWorker(QWidget *parent = 0);
     ~DialogNewWorker();
-    bool getWorkInfo(Worker* worker);
+    bool getWorker(Worker* worker);
 
 private:
     Ui::DialogNewWorker *ui;

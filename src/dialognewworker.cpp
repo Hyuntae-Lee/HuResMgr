@@ -14,7 +14,7 @@ DialogNewWorker::~DialogNewWorker()
     delete ui;
 }
 
-bool DialogNewWorker::getWorkInfo(Worker* worker)
+bool DialogNewWorker::getWorker(Worker* worker)
 {
     if (!worker) {
         return false;
@@ -26,6 +26,7 @@ bool DialogNewWorker::getWorkInfo(Worker* worker)
     QString address = ui->lineEdit_address->text();
     QString phoneNum = ui->lineEdit_phoneNum->text();
     QString bankAccount = ui->lineEdit_bankAccount->text();
+    QString payStr = ui->lineEdit_pay->text();
 
     worker->setRrNum(rrNum);
     worker->setName(name);
@@ -34,6 +35,14 @@ bool DialogNewWorker::getWorkInfo(Worker* worker)
     worker->setBankAccount(bankAccount);
     foreach(QString major, majorListStr) {
         worker->addMajor(major);
+    }
+    bool ok;
+    int pay = payStr.toInt(&ok);
+    if (ok) {
+        worker->setPay(pay);
+    }
+    else {
+        worker->setPay(0);
     }
 
     return true;
