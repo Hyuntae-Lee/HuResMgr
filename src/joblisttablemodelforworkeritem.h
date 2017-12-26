@@ -1,13 +1,13 @@
-#ifndef JOBHISTORYTABLEMODELFORWORKERITEM_H
-#define JOBHISTORYTABLEMODELFORWORKERITEM_H
+#ifndef JOBLISTTABLEMODELFORWORKERITEM_H
+#define JOBLISTTABLEMODELFORWORKERITEM_H
 
 #include <QList>
 #include <QDate>
 
-class JobHistoryTableModelForWorkerItem
+class JobListTableModelForWorkerItem
 {
 public:
-    JobHistoryTableModelForWorkerItem();
+    JobListTableModelForWorkerItem();
 
 public:
     int pay();
@@ -23,4 +23,4 @@ private:
     QDate m_date;
 };
 
-#endif // JOBHISTORYTABLEMODELFORWORKERITEM_H
+#endif // JOBLISTTABLEMODELFORWORKERITEM_H

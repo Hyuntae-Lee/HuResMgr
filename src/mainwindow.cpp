@@ -7,7 +7,7 @@
 #include "dialognewworker.h"
 #include "dialognewcompany.h"
 #include "dialognewjob.h"
-#include "jobhistorytablemodelforworker.h"
+#include "joblisttablemodelforworker.h"
 
 #define DB_FILE_PATH "/data/main.db"
 
@@ -18,13 +18,13 @@ MainWindow::MainWindow(QWidget *parent) :
     m_dbHdlr = new DBHdlr;
     m_model_worker = new QStringListModel;
     m_model_company = new QStringListModel;
-    m_model_jobHistoryForWorker = new JobHistoryTableModelForWorker(m_jobList, m_workerList, m_companyList);
+    m_model_jobListForWorker = new JobListTableModelForWorker(m_jobList, m_workerList, m_companyList);
 
     ui->setupUi(this);
 
     ui->listView_worker->setModel(m_model_worker);
     ui->listView_company->setModel(m_model_company);
-    ui->tableView_historyForWorker->setModel(m_model_jobHistoryForWorker);
+    ui->tableView_jobListForWorker->setModel(m_model_jobListForWorker);
 }
 
 MainWindow::~MainWindow()
@@ -32,7 +32,7 @@ MainWindow::~MainWindow()
     delete m_dbHdlr;
     delete m_model_worker;
     delete m_model_company;
-    delete m_model_jobHistoryForWorker;
+    delete m_model_jobListForWorker;
     delete ui;
 }
 
@@ -95,7 +95,7 @@ void MainWindow::on_listView_worker_clicked(const QModelIndex &index)
     ui->label_workerAddr->setText(address);
     ui->label_workerMajor->setText(majorStr);
 
-    m_model_jobHistoryForWorker->setWorker(worker.rrNum());
+    m_model_jobListForWorker->setWorker(worker.rrNum());
 }
 
 void MainWindow::on_pushButton_newCompany_clicked()

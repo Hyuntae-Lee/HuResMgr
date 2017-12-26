@@ -1,4 +1,4 @@
-#include "jobhistorytablemodelforworker.h"
+#include "joblisttablemodelforworker.h"
 #include <QMessageBox>
 
 typedef enum {
@@ -20,17 +20,17 @@ static WorkHistoryModelItem_t s_model_item[] = {
     { COLUMN_DATE     , "일자"     },
 };
 
-JobHistoryTableModelForWorker::JobHistoryTableModelForWorker(QList<Job> &jobList, QList<Worker>& workerList, QList<Company>& companyList)
+JobListTableModelForWorker::JobListTableModelForWorker(QList<Job> &jobList, QList<Worker>& workerList, QList<Company>& companyList)
     : m_jobList(jobList), m_workerList(workerList), m_companyList(companyList)
 {
 }
 
-void JobHistoryTableModelForWorker::clearItems()
+void JobListTableModelForWorker::clearItems()
 {
     m_itemList.clear();
 }
 
-void JobHistoryTableModelForWorker::setWorker(QString rrNum)
+void JobListTableModelForWorker::setWorker(QString rrNum)
 {
     clearItems();
 
@@ -40,7 +40,7 @@ void JobHistoryTableModelForWorker::setWorker(QString rrNum)
     }
 
     foreach (Job job, jobList) {
-        JobHistoryTableModelForWorkerItem modelItem;
+        JobListTableModelForWorkerItem modelItem;
 
         QString companyName = findCompanyNameWithBlNum(job.companyBlNum());
         int pay = findWorkerPayWithRRNum(job.workerRRNum());
@@ -56,7 +56,7 @@ void JobHistoryTableModelForWorker::setWorker(QString rrNum)
     emit layoutChanged();
 }
 
-QVariant JobHistoryTableModelForWorker::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant JobListTableModelForWorker::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole) {
         return QVariant();
@@ -77,17 +77,17 @@ QVariant JobHistoryTableModelForWorker::headerData(int section, Qt::Orientation 
     }
 }
 
-int JobHistoryTableModelForWorker::rowCount(const QModelIndex &) const
+int JobListTableModelForWorker::rowCount(const QModelIndex &) const
 {
     return m_itemList.count();
 }
 
-int JobHistoryTableModelForWorker::columnCount(const QModelIndex &) const
+int JobListTableModelForWorker::columnCount(const QModelIndex &) const
 {
     return COLUMN_NUM;
 }
 
-QVariant JobHistoryTableModelForWorker::data(const QModelIndex &index, int role) const
+QVariant JobListTableModelForWorker::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -98,7 +98,7 @@ QVariant JobHistoryTableModelForWorker::data(const QModelIndex &index, int role)
     }
 
     if (role == Qt::DisplayRole) {
-        JobHistoryTableModelForWorkerItem item = m_itemList[index.row()];
+        JobListTableModelForWorkerItem item = m_itemList[index.row()];
 
         if (index.column() == COLUMN_DATE) {
             return item.date().toString(Qt::DefaultLocaleLongDate);
@@ -116,7 +116,7 @@ QVariant JobHistoryTableModelForWorker::data(const QModelIndex &index, int role)
     return QVariant();
 }
 
-bool JobHistoryTableModelForWorker::jobListForWorker(QList<Job>& out_list, QString rrNum)
+bool JobListTableModelForWorker::jobListForWorker(QList<Job>& out_list, QString rrNum)
 {
     if (m_jobList.count() <= 0) {
         return false;
@@ -133,7 +133,7 @@ bool JobHistoryTableModelForWorker::jobListForWorker(QList<Job>& out_list, QStri
     return true;
 }
 
-QString JobHistoryTableModelForWorker::findCompanyNameWithBlNum(QString blNum)
+QString JobListTableModelForWorker::findCompanyNameWithBlNum(QString blNum)
 {
     foreach (Company company, m_companyList) {
         if (company.blNum() != blNum) {
@@ -146,7 +146,7 @@ QString JobHistoryTableModelForWorker::findCompanyNameWithBlNum(QString blNum)
     return "";
 }
 
-int JobHistoryTableModelForWorker::findWorkerPayWithRRNum(QString rrNum)
+int JobListTableModelForWorker::findWorkerPayWithRRNum(QString rrNum)
 {
     foreach (Worker worker, m_workerList) {
         if (worker.rrNum() != rrNum) {

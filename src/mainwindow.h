@@ -12,7 +12,7 @@ class MainWindow;
 
 class DBHdlr;
 class QStringListModel;
-class JobHistoryTableModelForWorker;
+class JobListTableModelForWorker;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -44,7 +44,7 @@ private:
     DBHdlr* m_dbHdlr;
     QStringListModel* m_model_worker;
     QStringListModel* m_model_company;
-    JobHistoryTableModelForWorker* m_model_jobHistoryForWorker;
+    JobListTableModelForWorker* m_model_jobListForWorker;
     QList<Worker> m_workerList;
     QList<Company> m_companyList;
     QList<Job> m_jobList;

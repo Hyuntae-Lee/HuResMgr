@@ -1,18 +1,18 @@
-#ifndef JOBHISTORYTABLEMODELFORWORKER_H
-#define JOBHISTORYTABLEMODELFORWORKER_H
+#ifndef JOBLISTTABLEMODELFORWORKER_H
+#define JOBLISTTABLEMODELFORWORKER_H
 
 #include <QAbstractTableModel>
 #include "job.h"
 #include "worker.h"
 #include "company.h"
-#include "jobhistorytablemodelforworkeritem.h"
+#include "joblisttablemodelforworkeritem.h"
 
-class JobHistoryTableModelForWorker : public QAbstractTableModel
+class JobListTableModelForWorker : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    explicit JobHistoryTableModelForWorker(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList);
+    explicit JobListTableModelForWorker(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList);
 
 public:
     void clearItems();
@@ -30,10 +30,10 @@ private:
     int findWorkerPayWithRRNum(QString rrNum);
 
 private:
-    QList<JobHistoryTableModelForWorkerItem> m_itemList;
+    QList<JobListTableModelForWorkerItem> m_itemList;
     QList<Job>& m_jobList;
     QList<Worker>& m_workerList;
     QList<Company>& m_companyList;
 };
 
-#endif // JOBHISTORYTABLEMODELFORWORKER_H
+#endif // JOBLISTTABLEMODELFORWORKER_H
