@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     util.cpp \
     workerlistmodelfornewjob.cpp \
     companylistmodelfornewjob.cpp \
-    workerlistmodel.cpp
+    workerlistmodel.cpp \
+    companylistmodel.cpp
 
 HEADERS  += mainwindow.h \
     dbhdlr.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     util.h \
     workerlistmodelfornewjob.h \
     companylistmodelfornewjob.h \
-    workerlistmodel.h
+    workerlistmodel.h \
+    companylistmodel.h
 
 FORMS    += mainwindow.ui \
     dialognewworker.ui \

@@ -18,6 +18,7 @@ public:
     bool removeWorker(QString rrNum);
     bool getCompanyList(QList<Company>& list);
     bool addCompany(Company company);
+    bool removeCompany(QString blNum);
     bool getJobList(QList<Job>& list);
     bool addJob(Job job);
 

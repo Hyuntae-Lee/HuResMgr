@@ -10,6 +10,7 @@
 #include "joblisttablemodelforworker.h"
 #include "joblisttablemodelforstat.h"
 #include "workerlistmodel.h"
+#include "companylistmodel.h"
 
 #define DB_FILE_PATH "/data/main.db"
 
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     m_dbHdlr = new DBHdlr;
     m_model_worker = new WorkerListModel(m_workerList);
-    m_model_company = new QStringListModel;
+    m_model_company = new CompanyListModel(m_companyList);
     m_model_jobListForWorker = new JobListTableModelForWorker(m_jobList, m_workerList, m_companyList);
     m_model_jobListForStat = new JobListTableModelForStat(m_jobList, m_workerList, m_companyList);
 
@@ -61,7 +62,6 @@ void MainWindow::on_pushButton_connectDB_clicked()
     _load_company_list(m_companyList);
     _load_job_list(m_jobList);
 
-    _update_company_list(m_companyList);
     _update_job_list(m_jobList);
 }
 
@@ -83,10 +83,15 @@ void MainWindow::on_pushButton_newHR_clicked()
     }
 
     _load_worker_list(m_workerList);
+    m_model_worker->refresh();
 }
 
 void MainWindow::on_pushButton_removeWorker_clicked()
 {
+    if (m_workerList.count() <= 0) {
+        return;
+    }
+
     QString rrNum = m_model_worker->rrNum(ui->listView_worker->currentIndex());
     m_dbHdlr->removeWorker(rrNum);
 
@@ -96,6 +101,10 @@ void MainWindow::on_pushButton_removeWorker_clicked()
 
 void MainWindow::on_listView_worker_clicked(const QModelIndex &index)
 {
+    if (index.row() >= m_workerList.count()) {
+        return;
+    }
+
     Worker worker = m_workerList.at(index.row());
 
     QString name = worker.name();
@@ -131,7 +140,20 @@ void MainWindow::on_pushButton_newCompany_clicked()
     }
 
     _load_company_list(m_companyList);
-    _update_company_list(m_companyList);
+    m_model_company->refresh();
+}
+
+void MainWindow::on_pushButton_removeCompany_clicked()
+{
+    if (m_companyList.count() <= 0) {
+        return;
+    }
+
+    QString blNum = m_model_company->blNum(ui->listView_company->currentIndex());
+    m_dbHdlr->removeCompany(blNum);
+
+    _load_company_list(m_companyList);
+    m_model_company->refresh();
 }
 
 void MainWindow::on_listView_company_clicked(const QModelIndex &index)
@@ -185,17 +207,6 @@ void MainWindow::_load_worker_list(QList<Worker>& listValue)
     m_model_worker->refresh();
 }
 
-void MainWindow::_update_company_list(QList<Company> listValue)
-{
-    QStringList strList;
-    foreach (Company company, listValue) {
-        QString lableStr = QString("%1").arg(company.name());
-        strList.append(lableStr);
-    }
-
-    m_model_company->setStringList(strList);
-}
-
 void MainWindow::_load_company_list(QList<Company> &listValue)
 {
     listValue.clear();
@@ -203,6 +214,8 @@ void MainWindow::_load_company_list(QList<Company> &listValue)
         QMessageBox::critical(this, tr("Error"), tr("Cannot load data from!!"), tr("Ok"));
         return;
     }
+
+    m_model_company->refresh();
 }
 
 void MainWindow::_update_job_list(QList<Job>)

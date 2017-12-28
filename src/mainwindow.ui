@@ -52,7 +52,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_worker">
        <attribute name="title">
@@ -252,6 +252,13 @@
              <widget class="QPushButton" name="pushButton_newCompany">
               <property name="text">
                <string>추가</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_removeCompany">
+              <property name="text">
+               <string>삭제</string>
               </property>
              </widget>
             </item>

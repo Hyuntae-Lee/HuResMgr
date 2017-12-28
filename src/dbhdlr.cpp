@@ -177,6 +177,23 @@ bool DBHdlr::addCompany(Company company)
     return true;
 }
 
+bool DBHdlr::removeCompany(QString blNum)
+{
+    if (!m_db.isOpen()) {
+        return false;
+    }
+
+    QString queryStr = QString("DELETE FROM Company WHERE business_license = '%1'").arg(blNum);
+
+    QSqlQuery query(queryStr);
+    if(!query.isActive()) {
+        qWarning() << "removeCompany - ERROR: " << query.lastError().text();
+        return false;
+    }
+
+    return true;
+}
+
 bool DBHdlr::getJobList(QList<Job>& list)
 {
     if (!m_db.isOpen()) {

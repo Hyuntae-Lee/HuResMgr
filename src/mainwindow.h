@@ -11,7 +11,7 @@ class MainWindow;
 }
 
 class DBHdlr;
-class QStringListModel;
+class CompanyListModel;
 class WorkerListModel;
 class JobListTableModelForWorker;
 class JobListTableModelForStat;
@@ -32,9 +32,10 @@ private slots:
     void on_listView_company_clicked(const QModelIndex &index);
     void on_pushButton_workNew_clicked();
 
+    void on_pushButton_removeCompany_clicked();
+
 private:
     void _load_worker_list(QList<Worker> &listValue);
-    void _update_company_list(QList<Company> listValue);
     void _load_company_list(QList<Company> &listValue);
     void _update_job_list(QList<Job>);
     void _load_job_list(QList<Job> &listValue);
@@ -48,7 +49,7 @@ private:
     Ui::MainWindow *ui;
     DBHdlr* m_dbHdlr;
     WorkerListModel* m_model_worker;
-    QStringListModel* m_model_company;
+    CompanyListModel* m_model_company;
     JobListTableModelForWorker* m_model_jobListForWorker;
     JobListTableModelForStat* m_model_jobListForStat;
     QList<Worker> m_workerList;
