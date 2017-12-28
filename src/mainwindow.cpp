@@ -214,7 +214,7 @@ void MainWindow::on_pushButton_removeJobForStat_clicked()
         return;
     }
 
-    QModelIndex currentIndex;
+    QModelIndex currentIndex = ui->tableView_jobListForStat->currentIndex();
     QString blNum = m_model_jobListForStat->companyBlNum(currentIndex);
     QString rrNum = m_model_jobListForStat->workerRRNum(currentIndex);
     QDate date = m_model_jobListForStat->workDate(currentIndex);

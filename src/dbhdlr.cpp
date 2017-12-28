@@ -249,7 +249,7 @@ bool DBHdlr::removeJob(QString blNum, QString rrNum, QDate date)
         return false;
     }
 
-    QString queryStr = QString("DELETE FROM Job WHERE company_blNum = '%1', worker_rrnum = '%1', date = '%1'")
+    QString queryStr = QString("DELETE FROM Job WHERE company_blNum = '%1' AND worker_rrnum = '%2' AND date = '%3'")
             .arg(blNum).arg(rrNum).arg(date.toString(DB_DATE_FORMAT));
 
     QSqlQuery query(queryStr);
