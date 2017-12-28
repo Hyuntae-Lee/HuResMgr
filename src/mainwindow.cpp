@@ -218,7 +218,10 @@ void MainWindow::on_pushButton_removeJobForStat_clicked()
     QString blNum = m_model_jobListForStat->companyBlNum(currentIndex);
     QString rrNum = m_model_jobListForStat->workerRRNum(currentIndex);
     QDate date = m_model_jobListForStat->workDate(currentIndex);
-    m_dbHdlr->removeJob(blNum, rrNum, date);
+
+    if (!m_dbHdlr->removeJob(blNum, rrNum, date)) {
+        return;
+    }
 
     _load_job_list(m_jobList);
     m_model_jobListForStat->refresh();

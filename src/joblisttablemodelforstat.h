@@ -50,6 +50,8 @@ private:
     QList<Job>& m_jobList;
     QList<Worker>& m_workerList;
     QList<Company>& m_companyList;
+    QDate m_dateFrom;
+    QDate m_dateTo;
 };
 
 #endif // JOBLISTTABLEMODELFORSTAT_H

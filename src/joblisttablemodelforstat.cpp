@@ -23,35 +23,14 @@ void JobListTableModelForStat::clearItems()
 
 void JobListTableModelForStat::setPeriod(QDate& from, QDate& to)
 {
-    clearItems();
-
     if (from > to) {
         return;
     }
 
-    foreach (Job job, m_jobList) {
-        if (job.date() >= from && job.date() <= to) {
+    m_dateFrom = from;
+    m_dateTo = to;
 
-            int id = job.id();
-            QString companyName = Util::findCompanyNameWithBlNum(m_companyList, job.companyBlNum());
-            QString workerName = Util::findWorkerNameWithRRNum(m_workerList, job.workerRRNum());
-            long long pay = Util::findWorkerPayWithRRNum(m_workerList, job.workerRRNum());
-            QDate date = job.date();
-
-            JobListTableModelForStatItem item;
-            item.setId(id);
-            item.setCompanyName(companyName);
-            item.setWorkerName(workerName);
-            item.setPay(pay);
-            item.setDate(date);
-            item.setCompanyBlNum(job.companyBlNum());
-            item.setWorkerRrNum(job.workerRRNum());
-
-            m_itemList.append(item);
-        }
-    }
-
-    emit layoutChanged();
+    refresh();
 }
 
 int JobListTableModelForStat::columnSize(ModelItemColumnIdx idx)
@@ -76,6 +55,29 @@ QDate JobListTableModelForStat::workDate(const QModelIndex &index)
 
 void JobListTableModelForStat::refresh()
 {
+    m_itemList.clear();
+    foreach (Job job, m_jobList) {
+        if (job.date() >= m_dateFrom && job.date() <= m_dateTo) {
+
+            int id = job.id();
+            QString companyName = Util::findCompanyNameWithBlNum(m_companyList, job.companyBlNum());
+            QString workerName = Util::findWorkerNameWithRRNum(m_workerList, job.workerRRNum());
+            long long pay = Util::findWorkerPayWithRRNum(m_workerList, job.workerRRNum());
+            QDate date = job.date();
+
+            JobListTableModelForStatItem item;
+            item.setId(id);
+            item.setCompanyName(companyName);
+            item.setWorkerName(workerName);
+            item.setPay(pay);
+            item.setDate(date);
+            item.setCompanyBlNum(job.companyBlNum());
+            item.setWorkerRrNum(job.workerRRNum());
+
+            m_itemList.append(item);
+        }
+    }
+
     emit layoutChanged();
 }
 
