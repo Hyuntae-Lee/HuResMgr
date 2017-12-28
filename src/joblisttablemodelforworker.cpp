@@ -1,23 +1,12 @@
 #include "joblisttablemodelforworker.h"
+#include "util.h"
 #include <QMessageBox>
 
-typedef enum {
-    COLUMN_COMPANY = 0,
-    COLUMN_PAY,
-    COLUMN_DATE,
-    COLUMN_NUM
-} WorkHistoryModelItemColumnIdx;
-
-typedef struct _WorkHistoryModelItem_t {
-    WorkHistoryModelItemColumnIdx idx;
-    QString label;
-} WorkHistoryModelItem_t;
-
-static WorkHistoryModelItem_t s_model_item[] = {
-    /*       idx      ,   label   */
-    { COLUMN_COMPANY  , "업체"     },
-    { COLUMN_PAY      , "일당"     },
-    { COLUMN_DATE     , "일자"     },
+static JobListTableModelForWorker::ModelItem_t s_model_item[] = {
+    /*                    idx                    , label , size */
+    { JobListTableModelForWorker::COL_COMPANYNAME, "업체", 150  },
+    { JobListTableModelForWorker::COL_PAY        , "일당", 150  },
+    { JobListTableModelForWorker::COL_DATE       , "일자", 100  },
 };
 
 JobListTableModelForWorker::JobListTableModelForWorker(QList<Job> &jobList, QList<Worker>& workerList, QList<Company>& companyList)
@@ -35,15 +24,15 @@ void JobListTableModelForWorker::setWorker(QString rrNum)
     clearItems();
 
     QList<Job> jobList;
-    if (!jobListForWorker(jobList, rrNum)) {
+    if (!Util::jobListForWorker(jobList, m_jobList, rrNum)) {
         return;
     }
 
     foreach (Job job, jobList) {
         JobListTableModelForWorkerItem modelItem;
 
-        QString companyName = findCompanyNameWithBlNum(job.companyBlNum());
-        int pay = findWorkerPayWithRRNum(job.workerRRNum());
+        QString companyName = Util::findCompanyNameWithBlNum(m_companyList, job.companyBlNum());
+        int pay = Util::findWorkerPayWithRRNum(m_workerList, job.workerRRNum());
         QDate date = job.date();
 
         modelItem.setCompanyName(companyName);
@@ -56,6 +45,11 @@ void JobListTableModelForWorker::setWorker(QString rrNum)
     emit layoutChanged();
 }
 
+int JobListTableModelForWorker::columnSize(ModelItemColumnIdx idx)
+{
+    return s_model_item[idx].width;
+}
+
 QVariant JobListTableModelForWorker::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole) {
@@ -63,14 +57,11 @@ QVariant JobListTableModelForWorker::headerData(int section, Qt::Orientation ori
     }
 
     if (orientation == Qt::Horizontal) {
-        if (section >= COLUMN_NUM) {
+        if (section >= COL_NUM) {
             return QVariant();
         }
 
         return s_model_item[section].label;
-    }
-    else if (orientation == Qt::Vertical) {
-        return QString("%1").arg(section);
     }
     else {
         return QVariant();
@@ -84,7 +75,7 @@ int JobListTableModelForWorker::rowCount(const QModelIndex &) const
 
 int JobListTableModelForWorker::columnCount(const QModelIndex &) const
 {
-    return COLUMN_NUM;
+    return COL_NUM;
 }
 
 QVariant JobListTableModelForWorker::data(const QModelIndex &index, int role) const
@@ -100,61 +91,18 @@ QVariant JobListTableModelForWorker::data(const QModelIndex &index, int role) co
     if (role == Qt::DisplayRole) {
         JobListTableModelForWorkerItem item = m_itemList[index.row()];
 
-        if (index.column() == COLUMN_DATE) {
+        if (index.column() == COL_DATE) {
             return item.date().toString(Qt::DefaultLocaleLongDate);
         }
 
-        if (index.column() == COLUMN_COMPANY) {
+        if (index.column() == COL_COMPANYNAME) {
             return item.companyName();
         }
 
-        if (index.column() == COLUMN_PAY) {
+        if (index.column() == COL_PAY) {
             return QString("%1").arg(item.pay());
         }
     }
 
     return QVariant();
-}
-
-bool JobListTableModelForWorker::jobListForWorker(QList<Job>& out_list, QString rrNum)
-{
-    if (m_jobList.count() <= 0) {
-        return false;
-    }
-
-    foreach (Job job, m_jobList) {
-        if (job.workerRRNum() != rrNum) {
-            continue;
-        }
-
-        out_list.append(job);
-    }
-
-    return true;
-}
-
-QString JobListTableModelForWorker::findCompanyNameWithBlNum(QString blNum)
-{
-    foreach (Company company, m_companyList) {
-        if (company.blNum() != blNum) {
-            continue;
-        }
-
-        return company.name();
-    }
-
-    return "";
-}
-
-int JobListTableModelForWorker::findWorkerPayWithRRNum(QString rrNum)
-{
-    foreach (Worker worker, m_workerList) {
-        if (worker.rrNum() != rrNum) {
-            continue;
-        }
-
-        return worker.pay();
-    }
-
-    return 0;
 }

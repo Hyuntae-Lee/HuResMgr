@@ -35,12 +35,12 @@ void JobListTableModelForStatItem::setWorkerName(QString value)
     m_workerName = value;
 }
 
-int JobListTableModelForStatItem::pay()
+long long JobListTableModelForStatItem::pay()
 {
     return m_pay;
 }
 
-void JobListTableModelForStatItem::setPay(int value)
+void JobListTableModelForStatItem::setPay(long long value)
 {
     m_pay = value;
 }

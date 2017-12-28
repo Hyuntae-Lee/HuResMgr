@@ -52,7 +52,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_worker">
        <attribute name="title">
@@ -74,6 +74,13 @@
              <widget class="QPushButton" name="pushButton_newHR">
               <property name="text">
                <string>추가</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_removeWorker">
+              <property name="text">
+               <string>삭제</string>
               </property>
              </widget>
             </item>
@@ -215,6 +222,9 @@
            <widget class="QTableView" name="tableView_jobListForWorker">
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
+            </attribute>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
             </attribute>
            </widget>
           </item>
@@ -431,10 +441,10 @@
           <item>
            <layout class="QGridLayout" name="gridLayout">
             <item row="1" column="0">
-             <widget class="QDateEdit" name="dateEdit"/>
+             <widget class="QDateEdit" name="dateEdit_stat_from"/>
             </item>
             <item row="1" column="2">
-             <widget class="QDateEdit" name="dateEdit_2"/>
+             <widget class="QDateEdit" name="dateEdit_stat_to"/>
             </item>
             <item row="1" column="1">
              <widget class="QLabel" name="label_9">
@@ -475,7 +485,17 @@
            <layout class="QHBoxLayout" name="horizontalLayout_8"/>
           </item>
           <item>
-           <widget class="QTableView" name="tableView_jobListForStat"/>
+           <widget class="QTableView" name="tableView_jobListForStat">
+            <property name="gridStyle">
+             <enum>Qt::DotLine</enum>
+            </property>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+           </widget>
           </item>
          </layout>
         </item>

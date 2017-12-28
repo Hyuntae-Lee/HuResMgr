@@ -10,7 +10,8 @@ namespace Ui {
 class DialogNewJob;
 }
 
-class QStringListModel;
+class CompanyListModelForNewJob;
+class WorkerListModelForNewJob;
 class DialogNewJob : public QDialog
 {
     Q_OBJECT
@@ -20,16 +21,12 @@ public:
     ~DialogNewJob();
 
 public:
-    bool getJob(Job* out_job);
-
-private:
-    void _init_worker_list();
-    void _init_company_list();
+    bool getJob(QList<Job>& out_jobList);
 
 private:
     Ui::DialogNewJob *ui;
-    QStringListModel* m_model_workerList;
-    QStringListModel* m_model_companyList;
+    WorkerListModelForNewJob* m_model_workerList;
+    CompanyListModelForNewJob* m_model_companyList;
     QList<Worker> m_workerList;
     QList<Company> m_companyList;
 };

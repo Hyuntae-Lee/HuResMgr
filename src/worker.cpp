@@ -90,12 +90,12 @@ void Worker::setBankAccount(QString value)
     m_bankAccount = value;
 }
 
-int Worker::pay()
+long long Worker::pay()
 {
     return m_pay;
 }
 
-void Worker::setPay(int value)
+void Worker::setPay(long long value)
 {
     m_pay = value;
 }

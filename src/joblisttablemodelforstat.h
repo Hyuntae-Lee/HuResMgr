@@ -12,11 +12,28 @@ class JobListTableModelForStat : public QAbstractTableModel
     Q_OBJECT
 
 public:
+    typedef enum {
+        COL_NO = 0,
+        COL_COMPANYNAME,
+        COL_WORKERNAME,
+        COL_PAY,
+        COL_DATE,
+        COL_NUM
+    } ModelItemColumnIdx;
+
+    typedef struct _ModelItem_t {
+        ModelItemColumnIdx idx;
+        QString label;
+        int width;
+    } ModelItem_t;
+
+public:
     JobListTableModelForStat(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList);
 
 public:
     void clearItems();
     void setPeriod(QDate& from, QDate& to);
+    int columnSize(ModelItemColumnIdx idx);
 
 public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

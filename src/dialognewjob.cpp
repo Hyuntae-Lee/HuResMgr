@@ -1,22 +1,21 @@
 #include "dialognewjob.h"
 #include "ui_dialognewjob.h"
 #include <QStringListModel>
+#include "workerlistmodelfornewjob.h"
+#include "companylistmodelfornewjob.h"
 
 DialogNewJob::DialogNewJob(QList<Worker> &workerList, QList<Company> &companyList) :
     ui(new Ui::DialogNewJob)
 {
     ui->setupUi(this);
 
-    m_model_workerList = new QStringListModel;
-    m_model_companyList = new QStringListModel;
+    m_model_workerList = new WorkerListModelForNewJob(m_workerList);
+    m_model_companyList = new CompanyListModelForNewJob(m_companyList);
     m_workerList.append(workerList);
     m_companyList.append(companyList);
 
     ui->listView_newJob_worker->setModel(m_model_workerList);
     ui->listView_newJob_company->setModel(m_model_companyList);
-
-    _init_worker_list();
-    _init_company_list();
 }
 
 DialogNewJob::~DialogNewJob()
@@ -26,38 +25,28 @@ DialogNewJob::~DialogNewJob()
     delete ui;
 }
 
-bool DialogNewJob::getJob(Job* out_job)
+bool DialogNewJob::getJob(QList<Job>& out_jobList)
 {
-    if (!out_job) {
-        return false;
+    QModelIndexList companyIdxList = ui->listView_newJob_company->selectionModel()->selectedIndexes();
+    QModelIndexList workerIdxList = ui->listView_newJob_worker->selectionModel()->selectedIndexes();
+
+    QString blNum = m_model_companyList->blNum(companyIdxList.first());
+    QDate date = ui->calendarWidget_newJob_date->selectedDate();
+    QStringList workerRRNumList;
+    foreach (QModelIndex index, workerIdxList) {
+        QString rrNum = m_model_workerList->rrNum(index);
+        workerRRNumList.append(rrNum);
     }
 
-    int companyIdx = ui->listView_newJob_company->currentIndex().row();
-    int workerIdx = ui->listView_newJob_worker->currentIndex().row();
-    QDate date = ui->calendarWidget_newJob_date->selectedDate();
+    for (int i = 0; i < workerRRNumList.count(); i++) {
+        Job job;
 
-    out_job->setCompanyBlNum(m_companyList[companyIdx].blNum());
-    out_job->setWorkerRRNum(m_workerList[workerIdx].rrNum());
-    out_job->setDate(date);
+        job.setCompanyBlNum(blNum);
+        job.setDate(date);
+        job.setWorkerRRNum(workerRRNumList[i]);
+
+        out_jobList.append(job);
+    }
 
     return true;
-}
-
-void DialogNewJob::_init_worker_list()
-{
-    QStringList itemList;
-    foreach(Worker worker, m_workerList) {
-        QString lableStr = QString("%1(%2)").arg(worker.name()).arg(worker.rrNum());
-        itemList.append(lableStr);
-    }
-    m_model_workerList->setStringList(itemList);
-}
-
-void DialogNewJob::_init_company_list()
-{
-    QStringList itemList;
-    foreach(Company company, m_companyList) {
-        itemList.append(company.name());
-    }
-    m_model_companyList->setStringList(itemList);
 }

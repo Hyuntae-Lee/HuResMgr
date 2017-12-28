@@ -27,8 +27,8 @@ public:
     void setPhoneNum(QString value);
     QString bankAccount();
     void setBankAccount(QString value);
-    int pay();
-    void setPay(int value);
+    long long pay();
+    void setPay(long long value);
     bool operator ==(Worker &w) const;
 
     QString labelStr();
@@ -42,7 +42,7 @@ private:
     QString m_address;
     QString m_phoneNum;
     QString m_bankAccount;
-    int m_pay;
+    long long m_pay;
 };
 
 #endif // WORKER_H

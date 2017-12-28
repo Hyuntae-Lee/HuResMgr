@@ -1,26 +1,13 @@
 #include "joblisttablemodelforstat.h"
+#include "util.h"
 
-typedef enum {
-    COLUMN_NO = 0,
-    COLUMN_COMPANYNAME,
-    COLUMN_WORKERNAME,
-    COLUMN_PAY,
-    COLUMN_DATE,
-    COLUMN_NUM
-} WorkHistoryModelItemColumnIdx;
-
-typedef struct _WorkHistoryModelItem_t {
-    WorkHistoryModelItemColumnIdx idx;
-    QString label;
-} WorkHistoryModelItem_t;
-
-static WorkHistoryModelItem_t s_model_item[] = {
-    /*       idx        , label  */
-    { COLUMN_NO         , "순번" },
-    { COLUMN_COMPANYNAME, "업체" },
-    { COLUMN_WORKERNAME , "인재" },
-    { COLUMN_PAY        , "일당" },
-    { COLUMN_DATE       , "일자" },
+static JobListTableModelForStat::ModelItem_t s_model_item[] = {
+    /*                   idx                   , label , size  */
+    { JobListTableModelForStat::COL_NO         , "순번", 50    },
+    { JobListTableModelForStat::COL_COMPANYNAME, "업체", 150   },
+    { JobListTableModelForStat::COL_WORKERNAME , "인재", 100   },
+    { JobListTableModelForStat::COL_PAY        , "일당", 150   },
+    { JobListTableModelForStat::COL_DATE       , "일자", 100   },
 };
 
 JobListTableModelForStat::JobListTableModelForStat(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList)
@@ -36,43 +23,101 @@ void JobListTableModelForStat::clearItems()
 
 void JobListTableModelForStat::setPeriod(QDate& from, QDate& to)
 {
+    clearItems();
 
+    if (from > to) {
+        return;
+    }
+
+    foreach (Job job, m_jobList) {
+        if (job.date() >= from && job.date() <= to) {
+
+            int id = job.id();
+            QString companyName = Util::findCompanyNameWithBlNum(m_companyList, job.companyBlNum());
+            QString workerName = Util::findWorkerNameWithRRNum(m_workerList, job.workerRRNum());
+            long long pay = Util::findWorkerPayWithRRNum(m_workerList, job.workerRRNum());
+            QDate date = job.date();
+
+            JobListTableModelForStatItem item;
+            item.setId(id);
+            item.setCompanyName(companyName);
+            item.setWorkerName(workerName);
+            item.setPay(pay);
+            item.setDate(date);
+
+            m_itemList.append(item);
+        }
+    }
+
+    emit layoutChanged();
 }
 
-QVariant JobListTableModelForStat::headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+int JobListTableModelForStat::columnSize(ModelItemColumnIdx idx)
+{
+    return s_model_item[idx].width;
+}
+
+QVariant JobListTableModelForStat::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole) {
         return QVariant();
     }
 
-    Error : 여기부터
-
     if (orientation == Qt::Horizontal) {
-        if (section >= COLUMN_NUM) {
+        if (section >= COL_NUM) {
             return QVariant();
         }
 
         return s_model_item[section].label;
-    }
-    else if (orientation == Qt::Vertical) {
-        return QString("%1").arg(section);
     }
     else {
         return QVariant();
     }
 }
 
-int JobListTableModelForStat::rowCount(const QModelIndex &parent = QModelIndex()) const override
+int JobListTableModelForStat::rowCount(const QModelIndex&) const
 {
     return m_itemList.count();
 }
 
-int JobListTableModelForStat::columnCount(const QModelIndex &parent = QModelIndex()) const
+int JobListTableModelForStat::columnCount(const QModelIndex&) const
 {
-    return COLUMN_NUM;
+    return COL_NUM;
 }
 
-QVariant JobListTableModelForStat::data(const QModelIndex &index, int role = Qt::DisplayRole) const
+QVariant JobListTableModelForStat::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid()) {
+        return QVariant();
+    }
 
+    if (role == Qt::TextAlignmentRole) {
+        return int(Qt::AlignCenter | Qt::AlignVCenter);
+    }
+
+    if (role == Qt::DisplayRole) {
+        JobListTableModelForStatItem item = m_itemList[index.row()];
+
+        if (index.column() == COL_NO) {
+            return item.id();
+        }
+
+        if (index.column() == COL_COMPANYNAME) {
+            return item.companyName();
+        }
+
+        if (index.column() == COL_WORKERNAME) {
+            return item.workerName();
+        }
+
+        if (index.column() == COL_PAY) {
+            return QString("%1").arg(item.pay());
+        }
+
+        if (index.column() == COL_DATE) {
+            return item.date().toString(Qt::DefaultLocaleLongDate);
+        }
+    }
+
+    return QVariant();
 }

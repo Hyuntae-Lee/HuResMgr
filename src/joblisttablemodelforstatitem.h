@@ -16,8 +16,8 @@ public:
     void setCompanyName(QString value);
     QString workerName();
     void setWorkerName(QString value);
-    int pay();
-    void setPay(int value);
+    long long pay();
+    void setPay(long long value);
     QDate date();
     void setDate(QDate& value);
 
@@ -25,7 +25,7 @@ private:
     int m_id;
     QString m_companyName;
     QString m_workerName;
-    int m_pay;
+    long long m_pay;
     QDate m_date;
 };
 

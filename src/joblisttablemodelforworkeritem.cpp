@@ -5,12 +5,12 @@ JobListTableModelForWorkerItem::JobListTableModelForWorkerItem()
 
 }
 
-int JobListTableModelForWorkerItem::pay()
+long long JobListTableModelForWorkerItem::pay()
 {
     return m_pay;
 }
 
-void JobListTableModelForWorkerItem::setPay(int value)
+void JobListTableModelForWorkerItem::setPay(long long value)
 {
     m_pay = value;
 }

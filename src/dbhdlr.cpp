@@ -69,7 +69,7 @@ bool DBHdlr::getWorkerList(QList<Worker>& list)
         }
 
         bool ok;
-        int pay = payStr.toInt(&ok);
+        int pay = payStr.toLongLong(&ok);
         if (ok) {
             worker.setPay(pay);
         }
@@ -97,6 +97,23 @@ bool DBHdlr::addWorker(Worker worker)
     QSqlQuery query(queryStr);
     if(!query.isActive()) {
         qWarning() << "addWorker - ERROR: " << query.lastError().text();
+        return false;
+    }
+
+    return true;
+}
+
+bool DBHdlr::removeWorker(QString rrNum)
+{
+    if (!m_db.isOpen()) {
+        return false;
+    }
+
+    QString queryStr = QString("DELETE FROM Worker WHERE rr_num = '%1'").arg(rrNum);
+
+    QSqlQuery query(queryStr);
+    if(!query.isActive()) {
+        qWarning() << "removeWorker - ERROR: " << query.lastError().text();
         return false;
     }
 

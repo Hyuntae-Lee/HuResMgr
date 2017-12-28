@@ -15,6 +15,7 @@ public:
     bool connectToDB(QString fileName);
     bool getWorkerList(QList<Worker>& list);
     bool addWorker(Worker worker);
+    bool removeWorker(QString rrNum);
     bool getCompanyList(QList<Company>& list);
     bool addCompany(Company company);
     bool getJobList(QList<Job>& list);

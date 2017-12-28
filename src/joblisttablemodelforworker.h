@@ -12,22 +12,32 @@ class JobListTableModelForWorker : public QAbstractTableModel
     Q_OBJECT
 
 public:
+    typedef enum {
+        COL_COMPANYNAME = 0,
+        COL_PAY,
+        COL_DATE,
+        COL_NUM
+    } ModelItemColumnIdx;
+
+    typedef struct _ModelItem_t {
+        JobListTableModelForWorker::ModelItemColumnIdx idx;
+        QString label;
+        int width;
+    } ModelItem_t;
+
+public:
     explicit JobListTableModelForWorker(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList);
 
 public:
     void clearItems();
     void setWorker(QString rrNum);
+    int columnSize(ModelItemColumnIdx idx);
 
 public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-
-private:
-    bool jobListForWorker(QList<Job>& out_list, QString rrNum);
-    QString findCompanyNameWithBlNum(QString blNum);
-    int findWorkerPayWithRRNum(QString rrNum);
 
 private:
     QList<JobListTableModelForWorkerItem> m_itemList;
