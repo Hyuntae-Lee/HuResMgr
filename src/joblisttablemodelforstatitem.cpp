@@ -54,3 +54,23 @@ void JobListTableModelForStatItem::setDate(QDate& value)
 {
     m_date = value;
 }
+
+QString JobListTableModelForStatItem::companyBlNum()
+{
+    return m_companyBlNum;
+}
+
+void JobListTableModelForStatItem::setCompanyBlNum(QString value)
+{
+    m_companyBlNum = value;
+}
+
+QString JobListTableModelForStatItem::workerRrNum()
+{
+    return m_workerRrNum;
+}
+
+void JobListTableModelForStatItem::setWorkerRrNum(QString value)
+{
+    m_workerRrNum = value;
+}

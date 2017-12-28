@@ -242,3 +242,21 @@ bool DBHdlr::addJob(Job job)
 
     return true;
 }
+
+bool DBHdlr::removeJob(QString blNum, QString rrNum, QDate date)
+{
+    if (!m_db.isOpen()) {
+        return false;
+    }
+
+    QString queryStr = QString("DELETE FROM Job WHERE company_blNum = '%1', worker_rrnum = '%1', date = '%1'")
+            .arg(blNum).arg(rrNum).arg(date.toString(DB_DATE_FORMAT));
+
+    QSqlQuery query(queryStr);
+    if(!query.isActive()) {
+        qWarning() << "removeJob - ERROR: " << query.lastError().text();
+        return false;
+    }
+
+    return true;
+}

@@ -34,6 +34,10 @@ public:
     void clearItems();
     void setPeriod(QDate& from, QDate& to);
     int columnSize(ModelItemColumnIdx idx);
+    QString companyBlNum(const QModelIndex &index);
+    QString workerRRNum(const QModelIndex &index);
+    QDate workDate(const QModelIndex &index);
+    void refresh();
 
 public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

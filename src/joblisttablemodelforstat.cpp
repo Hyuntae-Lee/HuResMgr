@@ -44,6 +44,8 @@ void JobListTableModelForStat::setPeriod(QDate& from, QDate& to)
             item.setWorkerName(workerName);
             item.setPay(pay);
             item.setDate(date);
+            item.setCompanyBlNum(job.companyBlNum());
+            item.setWorkerRrNum(job.workerRRNum());
 
             m_itemList.append(item);
         }
@@ -55,6 +57,26 @@ void JobListTableModelForStat::setPeriod(QDate& from, QDate& to)
 int JobListTableModelForStat::columnSize(ModelItemColumnIdx idx)
 {
     return s_model_item[idx].width;
+}
+
+QString JobListTableModelForStat::companyBlNum(const QModelIndex &index)
+{
+    return m_itemList[index.row()].companyBlNum();
+}
+
+QString JobListTableModelForStat::workerRRNum(const QModelIndex &index)
+{
+    return m_itemList[index.row()].workerRrNum();
+}
+
+QDate JobListTableModelForStat::workDate(const QModelIndex &index)
+{
+    return m_itemList[index.row()].date();
+}
+
+void JobListTableModelForStat::refresh()
+{
+    emit layoutChanged();
 }
 
 QVariant JobListTableModelForStat::headerData(int section, Qt::Orientation orientation, int role) const

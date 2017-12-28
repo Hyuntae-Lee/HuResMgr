@@ -84,6 +84,9 @@ void MainWindow::on_pushButton_newHR_clicked()
 
     _load_worker_list(m_workerList);
     m_model_worker->refresh();
+
+    ui->listView_worker->reset();
+    ui->listView_worker->setModel(m_model_worker);
 }
 
 void MainWindow::on_pushButton_removeWorker_clicked()
@@ -97,6 +100,9 @@ void MainWindow::on_pushButton_removeWorker_clicked()
 
     _load_worker_list(m_workerList);
     m_model_worker->refresh();
+
+    ui->listView_worker->reset();
+    ui->listView_worker->setModel(m_model_worker);
 }
 
 void MainWindow::on_listView_worker_clicked(const QModelIndex &index)
@@ -141,6 +147,9 @@ void MainWindow::on_pushButton_newCompany_clicked()
 
     _load_company_list(m_companyList);
     m_model_company->refresh();
+
+    ui->listView_company->reset();
+    ui->listView_company->setModel(m_model_company);
 }
 
 void MainWindow::on_pushButton_removeCompany_clicked()
@@ -154,6 +163,9 @@ void MainWindow::on_pushButton_removeCompany_clicked()
 
     _load_company_list(m_companyList);
     m_model_company->refresh();
+
+    ui->listView_company->reset();
+    ui->listView_company->setModel(m_model_company);
 }
 
 void MainWindow::on_listView_company_clicked(const QModelIndex &index)
@@ -194,6 +206,25 @@ void MainWindow::on_pushButton_workNew_clicked()
 
     _load_job_list(m_jobList);
     _update_job_list(m_jobList);
+}
+
+void MainWindow::on_pushButton_removeJobForStat_clicked()
+{
+    if (m_jobList.count() <= 0) {
+        return;
+    }
+
+    QModelIndex currentIndex;
+    QString blNum = m_model_jobListForStat->companyBlNum(currentIndex);
+    QString rrNum = m_model_jobListForStat->workerRRNum(currentIndex);
+    QDate date = m_model_jobListForStat->workDate(currentIndex);
+    m_dbHdlr->removeJob(blNum, rrNum, date);
+
+    _load_job_list(m_jobList);
+    m_model_jobListForStat->refresh();
+
+    ui->tableView_jobListForStat->reset();
+    ui->tableView_jobListForStat->setModel(m_model_jobListForStat);
 }
 
 void MainWindow::_load_worker_list(QList<Worker>& listValue)

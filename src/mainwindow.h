@@ -29,10 +29,10 @@ private slots:
     void on_pushButton_removeWorker_clicked();
     void on_listView_worker_clicked(const QModelIndex &index);
     void on_pushButton_newCompany_clicked();
+    void on_pushButton_removeCompany_clicked();
     void on_listView_company_clicked(const QModelIndex &index);
     void on_pushButton_workNew_clicked();
-
-    void on_pushButton_removeCompany_clicked();
+    void on_pushButton_removeJobForStat_clicked();
 
 private:
     void _load_worker_list(QList<Worker> &listValue);

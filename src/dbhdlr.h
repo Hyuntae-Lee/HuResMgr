@@ -21,6 +21,7 @@ public:
     bool removeCompany(QString blNum);
     bool getJobList(QList<Job>& list);
     bool addJob(Job job);
+    bool removeJob(QString blNum, QString rrNum, QDate date);
 
 signals:
 
