@@ -56,7 +56,7 @@ void MainWindow::on_pushButton_refreshAllData_clicked()
     _refreshAllData();
 }
 
-void MainWindow::on_pushButton_newHR_clicked()
+void MainWindow::on_pushButton_addWorker_clicked()
 {
     DialogNewWorker dlg;
 
@@ -164,12 +164,12 @@ void MainWindow::on_listView_company_clicked(const QModelIndex &index)
     Company company = m_companyList.at(index.row());
 
     // conpany info. update
-    ui->label_companyName->setText(company.name());
-    ui->label_companyBlNum->setText(company.blNum());
-    ui->label_companyOwner->setText(company.owner());
-    ui->label_companyAddress->setText(company.address());
-    ui->label_companyPhoneNum->setText(company.phoneNum());
-    ui->label_companyAccount->setText(company.bankAccount());
+    ui->lineEdit_companyName->setText(company.name());
+    ui->lineEdit_companyBlNum->setText(company.blNum());
+    ui->lineEdit_companyOwner->setText(company.owner());
+    ui->lineEdit_companyAddress->setText(company.address());
+    ui->lineEdit_companyPhoneNum->setText(company.phoneNum());
+    ui->lineEdit_companyAccount->setText(company.bankAccount());
 
     // job list update
     QDate dateFrom = ui->dateEdit_company_from->date();
@@ -180,7 +180,7 @@ void MainWindow::on_listView_company_clicked(const QModelIndex &index)
     m_model_jobListForCompany->refresh();
 }
 
-void MainWindow::on_pushButton_workNew_clicked()
+void MainWindow::on_pushButton_addJob_clicked()
 {
     DialogNewJob dlg(m_workerList, m_companyList);
 
@@ -207,7 +207,7 @@ void MainWindow::on_pushButton_workNew_clicked()
     _update_job_list();
 }
 
-void MainWindow::on_pushButton_removeJobForStat_clicked()
+void MainWindow::on_pushButton_removeJob_clicked()
 {
     if (m_jobList.count() <= 0) {
         return;
@@ -303,6 +303,29 @@ void MainWindow::on_pushButton_editApply_clicked()
 
     ui->listView_worker->reset();
     ui->listView_worker->setModel(m_model_worker);
+
+    _update_job_list();
+}
+
+void MainWindow::on_pushButton_companyEditApply_clicked()
+{
+    QString owner = ui->lineEdit_companyOwner->text();
+    QString name = ui->lineEdit_companyName->text();
+    QString blNum = ui->lineEdit_companyBlNum->text();
+    QString phoneNum = ui->lineEdit_companyPhoneNum->text();
+    QString address = ui->lineEdit_companyAddress->text();
+    QString account = ui->lineEdit_companyAccount->text();
+
+    if (!m_dbHdlr->updateCompany(blNum, name, address, owner, account, phoneNum)) {
+        QMessageBox::critical(this, tr("Error"), tr("Cannot update company data!!"), tr("Ok"));
+        return;
+    }
+
+    _load_company_list(m_companyList);
+    m_model_company->refresh();
+
+    ui->listView_company->reset();
+    ui->listView_company->setModel(m_model_company);
 
     _update_job_list();
 }

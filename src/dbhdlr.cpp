@@ -197,6 +197,25 @@ bool DBHdlr::addCompany(Company company)
     return true;
 }
 
+bool DBHdlr::updateCompany(QString blNum, QString name, QString address, QString owner,
+                           QString account, QString phoneNum)
+{
+    if (!m_db.isOpen()) {
+        return false;
+    }
+
+    QString queryStr = QString("UPDATE Company SET name = '%2', owner = '%3', address = '%4', phone_num = '%5', bank_account = '%6' WHERE business_license = '%1'")
+            .arg(blNum).arg(name).arg(owner).arg(address).arg(phoneNum).arg(account);
+
+    QSqlQuery query(queryStr);
+    if(!query.isActive()) {
+        qWarning() << "updateCompany - ERROR: " << query.lastError().text();
+        return false;
+    }
+
+    return true;
+}
+
 bool DBHdlr::removeCompany(QString blNum)
 {
     if (!m_db.isOpen()) {

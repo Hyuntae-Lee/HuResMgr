@@ -26,14 +26,14 @@ public:
 
 private slots:
     void on_pushButton_refreshAllData_clicked();
-    void on_pushButton_newHR_clicked();
+    void on_pushButton_addWorker_clicked();
     void on_pushButton_removeWorker_clicked();
     void on_listView_worker_clicked(const QModelIndex &index);
     void on_pushButton_newCompany_clicked();
     void on_pushButton_removeCompany_clicked();
     void on_listView_company_clicked(const QModelIndex &index);
-    void on_pushButton_workNew_clicked();
-    void on_pushButton_removeJobForStat_clicked();
+    void on_pushButton_addJob_clicked();
+    void on_pushButton_removeJob_clicked();
     void on_pushButton_refreshJobjist_clicked();
     void on_pushButton_refreshJobListForCompany_clicked();
     void on_dateEdit_stat_from_editingFinished();
@@ -44,6 +44,7 @@ private slots:
     void on_dateEdit_worker_to_editingFinished();
     void on_pushButton_refreshJobListForWorker_clicked();
     void on_pushButton_editApply_clicked();
+    void on_pushButton_companyEditApply_clicked();
 
 private:
     void _load_worker_list(QList<Worker> &listValue);
