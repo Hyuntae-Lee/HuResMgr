@@ -45,7 +45,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_worker">
        <attribute name="title">
@@ -461,7 +461,37 @@
            </widget>
           </item>
           <item>
-           <widget class="QTableView" name="tableView_historyForCompany"/>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QDateEdit" name="dateEdit_company_from"/>
+            </item>
+            <item>
+             <widget class="QDateEdit" name="dateEdit_company_to"/>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_refreshJobListForCompany">
+              <property name="text">
+               <string>적용</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QTableView" name="tableView_jobListForCompany"/>
           </item>
          </layout>
         </item>
@@ -476,10 +506,13 @@
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="1" column="0">
+            <item row="1" column="1">
              <widget class="QDateEdit" name="dateEdit_stat_from"/>
             </item>
-            <item row="1" column="4">
+            <item row="1" column="3">
+             <widget class="QDateEdit" name="dateEdit_stat_to"/>
+            </item>
+            <item row="1" column="5">
              <spacer name="horizontalSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -493,9 +526,6 @@
              </spacer>
             </item>
             <item row="1" column="2">
-             <widget class="QDateEdit" name="dateEdit_stat_to"/>
-            </item>
-            <item row="1" column="1">
              <widget class="QLabel" name="label_9">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -508,10 +538,29 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="5">
+            <item row="1" column="4">
              <widget class="QPushButton" name="pushButton_refreshJobjist">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
                <string>적용</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>기간</string>
               </property>
              </widget>
             </item>
@@ -519,6 +568,9 @@
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <property name="spacing">
+             <number>6</number>
+            </property>
             <item>
              <widget class="QLabel" name="label">
               <property name="sizePolicy">
@@ -542,7 +594,7 @@
              <widget class="QPushButton" name="pushButton_workNew">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>80</width>
                 <height>0</height>
                </size>
               </property>
@@ -553,6 +605,12 @@
             </item>
             <item>
              <widget class="QPushButton" name="pushButton_removeJobForStat">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
                <string>삭제</string>
               </property>

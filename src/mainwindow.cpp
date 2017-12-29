@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _init_jobListPeriod();
     _init_uiSizes();
+
+    _connectToDB();
 }
 
 MainWindow::~MainWindow()
@@ -47,22 +49,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_connectDB_clicked()
 {
-#ifndef QT_DEBUG
-    QString curPath = QDir::currentPath();
-#else
-    QString curPath = "D:/projects/etc/HuResMgr";
-#endif // QT_DEBUG
-
-    if (!m_dbHdlr->connectToDB(curPath + DB_FILE_PATH)) {
-        QMessageBox::critical(this, tr("Error"), tr("Cannot connect to database!!"), tr("Ok"));
-        return;
-    }
-
-    _load_worker_list(m_workerList);
-    _load_company_list(m_companyList);
-    _load_job_list(m_jobList);
-
-    _update_job_list(m_jobList);
+    _connectToDB();
 }
 
 void MainWindow::on_pushButton_newHR_clicked()
@@ -205,7 +192,11 @@ void MainWindow::on_pushButton_workNew_clicked()
     }
 
     _load_job_list(m_jobList);
-    _update_job_list(m_jobList);
+    _update_job_list();
+    m_model_jobListForStat->refresh();
+
+    ui->tableView_jobListForStat->reset();
+    ui->tableView_jobListForStat->setModel(m_model_jobListForStat);
 }
 
 void MainWindow::on_pushButton_removeJobForStat_clicked()
@@ -252,7 +243,7 @@ void MainWindow::_load_company_list(QList<Company> &listValue)
     m_model_company->refresh();
 }
 
-void MainWindow::_update_job_list(QList<Job>)
+void MainWindow::_update_job_list()
 {
     QDate dateFrom = ui->dateEdit_stat_from->date();
     QDate dateTo = ui->dateEdit_stat_to->date();
@@ -267,28 +258,6 @@ void MainWindow::_load_job_list(QList<Job> &listValue)
         QMessageBox::critical(this, tr("Error"), tr("업무 데이터를 읽을 수 없습니다."), tr("Ok"));
         return;
     }
-}
-
-QString MainWindow::_companyLabelStr(QString blNum)
-{
-    foreach (Company item, m_companyList) {
-        if (item.blNum() == blNum) {
-            return item.labelStr();
-        }
-    }
-
-    return "";
-}
-
-QString MainWindow::_workerNameStr(QString rrNum)
-{
-    foreach (Worker item, m_workerList) {
-        if (item.rrNum() == rrNum) {
-            return item.name();
-        }
-    }
-
-    return "";
 }
 
 void MainWindow::_init_jobListPeriod()
@@ -321,4 +290,29 @@ void MainWindow::_init_uiSizes()
         JobListTableModelForWorker::ModelItemColumnIdx idx = (JobListTableModelForWorker::ModelItemColumnIdx)i;
         ui->tableView_jobListForWorker->setColumnWidth(idx, m_model_jobListForWorker->columnSize(idx));
     }
+}
+
+void MainWindow::_connectToDB()
+{
+#ifndef QT_DEBUG
+    QString curPath = QDir::currentPath();
+#else
+    QString curPath = "D:/projects/etc/HuResMgr";
+#endif // QT_DEBUG
+
+    if (!m_dbHdlr->connectToDB(curPath + DB_FILE_PATH)) {
+        QMessageBox::critical(this, tr("Error"), tr("Cannot connect to database!!"), tr("Ok"));
+        return;
+    }
+
+    _load_worker_list(m_workerList);
+    _load_company_list(m_companyList);
+    _load_job_list(m_jobList);
+
+    _update_job_list();
+}
+
+void MainWindow::on_pushButton_refreshJobjist_clicked()
+{
+    _update_job_list();
 }

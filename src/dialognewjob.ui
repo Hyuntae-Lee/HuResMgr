@@ -75,7 +75,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>인재</string>
+    <string>인력</string>
    </property>
   </widget>
   <widget class="QCalendarWidget" name="calendarWidget_newJob_date">

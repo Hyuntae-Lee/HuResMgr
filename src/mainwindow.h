@@ -34,16 +34,16 @@ private slots:
     void on_pushButton_workNew_clicked();
     void on_pushButton_removeJobForStat_clicked();
 
+    void on_pushButton_refreshJobjist_clicked();
+
 private:
     void _load_worker_list(QList<Worker> &listValue);
     void _load_company_list(QList<Company> &listValue);
-    void _update_job_list(QList<Job>);
+    void _update_job_list();
     void _load_job_list(QList<Job> &listValue);
-    QString _companyLabelStr(QString blNum);
-    QString _workerNameStr(QString rrNum);
-
     void _init_jobListPeriod();
     void _init_uiSizes();
+    void _connectToDB();
 
 private:
     Ui::MainWindow *ui;

@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     dialognewworker.cpp \
     company.cpp \
     dialognewcompany.cpp \
-    dialogdatepicker.cpp \
     dialognewjob.cpp \
     job.cpp \
     joblisttablemodelforworker.cpp \
@@ -30,7 +29,9 @@ SOURCES += main.cpp\
     workerlistmodelfornewjob.cpp \
     companylistmodelfornewjob.cpp \
     workerlistmodel.cpp \
-    companylistmodel.cpp
+    companylistmodel.cpp \
+    joblisttablemodelforcompany.cpp \
+    joblisttablemodelforcompanyitem.cpp
 
 HEADERS  += mainwindow.h \
     dbhdlr.h \
@@ -38,7 +39,6 @@ HEADERS  += mainwindow.h \
     dialognewworker.h \
     company.h \
     dialognewcompany.h \
-    dialogdatepicker.h \
     job.h \
     dialognewjob.h \
     joblisttablemodelforworker.h \
@@ -49,10 +49,11 @@ HEADERS  += mainwindow.h \
     workerlistmodelfornewjob.h \
     companylistmodelfornewjob.h \
     workerlistmodel.h \
-    companylistmodel.h
+    companylistmodel.h \
+    joblisttablemodelforcompany.h \
+    joblisttablemodelforcompanyitem.h
 
 FORMS    += mainwindow.ui \
     dialognewworker.ui \
     dialognewcompany.ui \
-    dialogdatepicker.ui \
     dialognewjob.ui
