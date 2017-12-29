@@ -86,6 +86,11 @@ void MainWindow::on_pushButton_removeWorker_clicked()
         return;
     }
 
+    if (QMessageBox::warning(this, tr("경고"), tr("정말 삭제 하시겠습니까?"), QMessageBox::Ok,
+                             QMessageBox::Cancel) != QMessageBox::Ok) {
+        return;
+    }
+
     QString rrNum = m_model_worker->rrNum(ui->listView_worker->currentIndex());
     m_dbHdlr->removeWorker(rrNum);
 
@@ -146,6 +151,11 @@ void MainWindow::on_pushButton_newCompany_clicked()
 void MainWindow::on_pushButton_removeCompany_clicked()
 {
     if (m_companyList.count() <= 0) {
+        return;
+    }
+
+    if (QMessageBox::warning(this, tr("경고"), tr("정말 삭제 하시겠습니까?"), QMessageBox::Ok,
+                             QMessageBox::Cancel) != QMessageBox::Ok) {
         return;
     }
 
@@ -210,6 +220,11 @@ void MainWindow::on_pushButton_addJob_clicked()
 void MainWindow::on_pushButton_removeJob_clicked()
 {
     if (m_jobList.count() <= 0) {
+        return;
+    }
+
+    if (QMessageBox::warning(this, tr("경고"), tr("정말 삭제 하시겠습니까?"), QMessageBox::Ok,
+                             QMessageBox::Cancel) != QMessageBox::Ok) {
         return;
     }
 
