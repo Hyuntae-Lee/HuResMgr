@@ -12,6 +12,7 @@
 #include "joblisttablemodelforcompany.h"
 #include "workerlistmodel.h"
 #include "companylistmodel.h"
+#include "xlsxdocument.h"
 
 #define DB_FILE_PATH "/data/main.db"
 
@@ -343,6 +344,14 @@ void MainWindow::on_pushButton_companyEditApply_clicked()
     ui->listView_company->setModel(m_model_company);
 
     _update_job_list();
+}
+
+void MainWindow::on_pushButton_exportJobListForWorker_clicked()
+{
+    Error: 여기 부터
+    QXlsx::Document xlsx;
+    xlsx.write("A1", "Hello Qt!");
+    xlsx.saveAs("D:/Test.xlsx");
 }
 
 void MainWindow::_load_worker_list(QList<Worker>& listValue)

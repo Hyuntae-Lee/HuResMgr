@@ -369,6 +369,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_exportJobListForWorker">
+              <property name="text">
+               <string>엑셀출력</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>

@@ -45,6 +45,7 @@ private slots:
     void on_pushButton_refreshJobListForWorker_clicked();
     void on_pushButton_editApply_clicked();
     void on_pushButton_companyEditApply_clicked();
+    void on_pushButton_exportJobListForWorker_clicked();
 
 private:
     void _load_worker_list(QList<Worker> &listValue);
