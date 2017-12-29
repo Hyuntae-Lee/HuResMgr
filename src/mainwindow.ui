@@ -45,7 +45,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_worker">
        <attribute name="title">
@@ -216,7 +216,7 @@
                <property name="geometry">
                 <rect>
                  <x>180</x>
-                 <y>130</y>
+                 <y>160</y>
                  <width>60</width>
                  <height>20</height>
                 </rect>
@@ -268,21 +268,11 @@
                 <bool>true</bool>
                </property>
               </widget>
-              <widget class="QLineEdit" name="lineEdit_workerAddress">
-               <property name="geometry">
-                <rect>
-                 <x>250</x>
-                 <y>100</y>
-                 <width>551</width>
-                 <height>20</height>
-                </rect>
-               </property>
-              </widget>
               <widget class="QLineEdit" name="lineEdit_workerAccount">
                <property name="geometry">
                 <rect>
                  <x>250</x>
-                 <y>130</y>
+                 <y>160</y>
                  <width>551</width>
                  <height>20</height>
                 </rect>
@@ -322,6 +312,16 @@
                </property>
                <property name="text">
                 <string>일당 :</string>
+               </property>
+              </widget>
+              <widget class="QTextEdit" name="textEdit_workerAddress">
+               <property name="geometry">
+                <rect>
+                 <x>250</x>
+                 <y>100</y>
+                 <width>551</width>
+                 <height>51</height>
+                </rect>
                </property>
               </widget>
              </widget>
@@ -647,7 +647,7 @@
               <rect>
                <x>90</x>
                <y>160</y>
-               <width>431</width>
+               <width>711</width>
                <height>20</height>
               </rect>
              </property>
@@ -657,7 +657,7 @@
               <rect>
                <x>90</x>
                <y>130</y>
-               <width>431</width>
+               <width>711</width>
                <height>20</height>
               </rect>
              </property>

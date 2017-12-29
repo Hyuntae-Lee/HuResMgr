@@ -112,7 +112,7 @@ void MainWindow::on_listView_worker_clicked(const QModelIndex &index)
     ui->lineEdit_workerName->setText(worker.name());
     ui->lineEdit_workerRRNum->setText(worker.rrNum());
     ui->lineEdit_workerPhoneNum->setText(worker.phoneNum());
-    ui->lineEdit_workerAddress->setText(worker.address());
+    ui->textEdit_workerAddress->setText(worker.address());
     ui->lineEdit_workerMajor->setText(worker.majorStr());
     ui->lineEdit_workerPay->setText(worker.payStr());
 
@@ -297,7 +297,7 @@ void MainWindow::on_pushButton_editApply_clicked()
     QString majorStr = ui->lineEdit_workerMajor->text();
     QString rrNum = ui->lineEdit_workerRRNum->text();
     QString phoneNum = ui->lineEdit_workerPhoneNum->text();
-    QString address = ui->lineEdit_workerAddress->text();
+    QString address = ui->textEdit_workerAddress->toPlainText();
     QString account = ui->lineEdit_workerAccount->text();
     QString payStr = ui->lineEdit_workerPay->text();
     int pay = 0;
