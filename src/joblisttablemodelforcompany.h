@@ -31,7 +31,7 @@ public:
     JobListTableModelForCompany(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList);
 
 public:
-    void clearItems();
+    void setCompany(QString blNum);
     void setPeriod(QDate& from, QDate& to);
     int columnSize(ModelItemColumnIdx idx);
     QString companyBlNum(const QModelIndex &index);
@@ -52,6 +52,7 @@ private:
     QList<Company>& m_companyList;
     QDate m_dateFrom;
     QDate m_dateTo;
+    QString m_companyBlNum;
 };
 
 #endif // JOBLISTTABLEMODELFORCOMPANY_H

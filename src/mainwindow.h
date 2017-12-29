@@ -13,6 +13,7 @@ class MainWindow;
 class DBHdlr;
 class CompanyListModel;
 class WorkerListModel;
+class JobListTableModelForCompany;
 class JobListTableModelForWorker;
 class JobListTableModelForStat;
 class MainWindow : public QMainWindow
@@ -24,7 +25,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_connectDB_clicked();
+    void on_pushButton_refreshAllData_clicked();
     void on_pushButton_newHR_clicked();
     void on_pushButton_removeWorker_clicked();
     void on_listView_worker_clicked(const QModelIndex &index);
@@ -33,23 +34,34 @@ private slots:
     void on_listView_company_clicked(const QModelIndex &index);
     void on_pushButton_workNew_clicked();
     void on_pushButton_removeJobForStat_clicked();
-
     void on_pushButton_refreshJobjist_clicked();
+    void on_pushButton_refreshJobListForCompany_clicked();
+    void on_dateEdit_stat_from_editingFinished();
+    void on_dateEdit_stat_to_editingFinished();
+    void on_dateEdit_company_from_editingFinished();
+    void on_dateEdit_company_to_editingFinished();
+    void on_dateEdit_worker_from_editingFinished();
+    void on_dateEdit_worker_to_editingFinished();
+    void on_pushButton_refreshJobListForWorker_clicked();
 
 private:
     void _load_worker_list(QList<Worker> &listValue);
     void _load_company_list(QList<Company> &listValue);
-    void _update_job_list();
+    void _update_job_list_for_stat();
+    void _update_job_list_for_company();
+    void _update_job_list_for_worker();
     void _load_job_list(QList<Job> &listValue);
     void _init_jobListPeriod();
     void _init_uiSizes();
-    void _connectToDB();
+    void _refreshAllData();
+    void _update_job_list();
 
 private:
     Ui::MainWindow *ui;
     DBHdlr* m_dbHdlr;
     WorkerListModel* m_model_worker;
     CompanyListModel* m_model_company;
+    JobListTableModelForCompany* m_model_jobListForCompany;
     JobListTableModelForWorker* m_model_jobListForWorker;
     JobListTableModelForStat* m_model_jobListForStat;
     QList<Worker> m_workerList;

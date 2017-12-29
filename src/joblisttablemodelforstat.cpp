@@ -16,11 +16,6 @@ JobListTableModelForStat::JobListTableModelForStat(QList<Job>& jobList, QList<Wo
 
 }
 
-void JobListTableModelForStat::clearItems()
-{
-    m_itemList.clear();
-}
-
 void JobListTableModelForStat::setPeriod(QDate& from, QDate& to)
 {
     if (from > to) {
@@ -29,8 +24,6 @@ void JobListTableModelForStat::setPeriod(QDate& from, QDate& to)
 
     m_dateFrom = from;
     m_dateTo = to;
-
-    refresh();
 }
 
 int JobListTableModelForStat::columnSize(ModelItemColumnIdx idx)

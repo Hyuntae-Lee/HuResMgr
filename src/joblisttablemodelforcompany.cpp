@@ -15,9 +15,9 @@ JobListTableModelForCompany::JobListTableModelForCompany(QList<Job> &jobList, QL
 {
 }
 
-void JobListTableModelForCompany::clearItems()
+void JobListTableModelForCompany::setCompany(QString blNum)
 {
-    m_itemList.clear();
+    m_companyBlNum = blNum;
 }
 
 void JobListTableModelForCompany::setPeriod(QDate& from, QDate& to)
@@ -28,8 +28,6 @@ void JobListTableModelForCompany::setPeriod(QDate& from, QDate& to)
 
     m_dateFrom = from;
     m_dateTo = to;
-
-    refresh();
 }
 
 int JobListTableModelForCompany::columnSize(ModelItemColumnIdx idx)
@@ -56,31 +54,34 @@ void JobListTableModelForCompany::refresh()
 {
     m_itemList.clear();
     foreach (Job job, m_jobList) {
-        if (job.date() >= m_dateFrom && job.date() <= m_dateTo) {
-
-            int id = job.id();
-            QString companyName = Util::findCompanyNameWithBlNum(m_companyList, job.companyBlNum());
-            QString workerName = Util::findWorkerNameWithRRNum(m_workerList, job.workerRRNum());
-            long long pay = Util::findWorkerPayWithRRNum(m_workerList, job.workerRRNum());
-            QDate date = job.date();
-
-            JobListTableModelForCompanyItem item;
-            item.setId(id);
-            item.setCompanyName(companyName);
-            item.setWorkerName(workerName);
-            item.setPay(pay);
-            item.setDate(date);
-            item.setCompanyBlNum(job.companyBlNum());
-            item.setWorkerRrNum(job.workerRRNum());
-
-            m_itemList.append(item);
+        if (job.companyBlNum() != m_companyBlNum) {
+            continue;
         }
+
+        if (!(job.date() >= m_dateFrom && job.date() <= m_dateTo)) {
+            continue;
+        }
+
+        int id = job.id();
+        QString workerName = Util::findWorkerNameWithRRNum(m_workerList, job.workerRRNum());
+        long long pay = Util::findWorkerPayWithRRNum(m_workerList, job.workerRRNum());
+        QDate date = job.date();
+
+        JobListTableModelForCompanyItem item;
+        item.setId(id);
+        item.setWorkerName(workerName);
+        item.setPay(pay);
+        item.setDate(date);
+        item.setCompanyBlNum(job.companyBlNum());
+        item.setWorkerRrNum(job.workerRRNum());
+
+        m_itemList.append(item);
     }
 
     emit layoutChanged();
 }
 
-QVariant JobListTableModelForStat::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant JobListTableModelForCompany::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole) {
         return QVariant();
@@ -98,27 +99,45 @@ QVariant JobListTableModelForStat::headerData(int section, Qt::Orientation orien
     }
 }
 
-int JobListTableModelForCompany::rowCount(const QModelIndex &parent) const
+int JobListTableModelForCompany::rowCount(const QModelIndex &) const
 {
-    if (!parent.isValid())
-        return 0;
-
-    // FIXME: Implement me!
+    return m_itemList.count();
 }
 
-int JobListTableModelForCompany::columnCount(const QModelIndex &parent) const
+int JobListTableModelForCompany::columnCount(const QModelIndex &) const
 {
-    if (!parent.isValid())
-        return 0;
-
-    // FIXME: Implement me!
+    return COL_NUM;
 }
 
 QVariant JobListTableModelForCompany::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
-    // FIXME: Implement me!
+    if (role == Qt::TextAlignmentRole) {
+        return int(Qt::AlignCenter | Qt::AlignVCenter);
+    }
+
+    if (role == Qt::DisplayRole) {
+        JobListTableModelForCompanyItem item = m_itemList[index.row()];
+
+        if (index.column() == COL_NO) {
+            return item.id();
+        }
+
+        if (index.column() == COL_WORKERNAME) {
+            return item.workerName();
+        }
+
+        if (index.column() == COL_PAY) {
+            return QString("%1").arg(item.pay());
+        }
+
+        if (index.column() == COL_DATE) {
+            return item.date().toString(Qt::DefaultLocaleLongDate);
+        }
+    }
+
     return QVariant();
 }

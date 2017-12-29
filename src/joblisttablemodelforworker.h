@@ -29,9 +29,10 @@ public:
     explicit JobListTableModelForWorker(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList);
 
 public:
-    void clearItems();
     void setWorker(QString rrNum);
+    void setPeriod(QDate& from, QDate& to);
     int columnSize(ModelItemColumnIdx idx);
+    void refresh();
 
 public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -44,6 +45,9 @@ private:
     QList<Job>& m_jobList;
     QList<Worker>& m_workerList;
     QList<Company>& m_companyList;
+    QDate m_dateFrom;
+    QDate m_dateTo;
+    QString m_workerRRNum;
 };
 
 #endif // JOBLISTTABLEMODELFORWORKER_H

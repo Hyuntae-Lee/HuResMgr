@@ -9,6 +9,7 @@
 #include "dialognewjob.h"
 #include "joblisttablemodelforworker.h"
 #include "joblisttablemodelforstat.h"
+#include "joblisttablemodelforcompany.h"
 #include "workerlistmodel.h"
 #include "companylistmodel.h"
 
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_model_company = new CompanyListModel(m_companyList);
     m_model_jobListForWorker = new JobListTableModelForWorker(m_jobList, m_workerList, m_companyList);
     m_model_jobListForStat = new JobListTableModelForStat(m_jobList, m_workerList, m_companyList);
+    m_model_jobListForCompany = new JobListTableModelForCompany(m_jobList, m_workerList, m_companyList);
 
     ui->setupUi(this);
 
@@ -30,11 +32,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listView_company->setModel(m_model_company);
     ui->tableView_jobListForWorker->setModel(m_model_jobListForWorker);
     ui->tableView_jobListForStat->setModel(m_model_jobListForStat);
+    ui->tableView_jobListForCompany->setModel(m_model_jobListForCompany);
 
     _init_jobListPeriod();
     _init_uiSizes();
 
-    _connectToDB();
+    _refreshAllData();
 }
 
 MainWindow::~MainWindow()
@@ -44,12 +47,13 @@ MainWindow::~MainWindow()
     delete m_model_company;
     delete m_model_jobListForWorker;
     delete m_model_jobListForStat;
+    delete m_model_jobListForCompany;
     delete ui;
 }
 
-void MainWindow::on_pushButton_connectDB_clicked()
+void MainWindow::on_pushButton_refreshAllData_clicked()
 {
-    _connectToDB();
+    _refreshAllData();
 }
 
 void MainWindow::on_pushButton_newHR_clicked()
@@ -100,19 +104,18 @@ void MainWindow::on_listView_worker_clicked(const QModelIndex &index)
 
     Worker worker = m_workerList.at(index.row());
 
-    QString name = worker.name();
-    QString rrNum = worker.rrNum();
-    QString phoneNum = worker.phoneNum();
-    QString address = worker.address();
-    QString majorStr = worker.majorStr();
+    ui->label_workerName->setText(worker.name());
+    ui->label_workerRrNum->setText(worker.rrNum());
+    ui->label_workerPhoneNum->setText(worker.phoneNum());
+    ui->label_workerAddr->setText(worker.address());
+    ui->label_workerMajor->setText(worker.majorStr());
 
-    ui->label_workerName->setText(name);
-    ui->label_workerRrNum->setText(rrNum);
-    ui->label_workerPhoneNum->setText(phoneNum);
-    ui->label_workerAddr->setText(address);
-    ui->label_workerMajor->setText(majorStr);
+    QDate dateFrom = ui->dateEdit_worker_from->date();
+    QDate dateTo = ui->dateEdit_worker_to->date();
 
+    m_model_jobListForWorker->setPeriod(dateFrom, dateTo);
     m_model_jobListForWorker->setWorker(worker.rrNum());
+    m_model_jobListForWorker->refresh();
 }
 
 void MainWindow::on_pushButton_newCompany_clicked()
@@ -159,19 +162,21 @@ void MainWindow::on_listView_company_clicked(const QModelIndex &index)
 {
     Company company = m_companyList.at(index.row());
 
-    QString name = company.name();
-    QString blNum = company.blNum();
-    QString phoneNum = company.phoneNum();
-    QString address = company.address();
-    QString owner = company.owner();
-    QString bankAccount = company.bankAccount();
+    // conpany info. update
+    ui->label_companyName->setText(company.name());
+    ui->label_companyBlNum->setText(company.blNum());
+    ui->label_companyOwner->setText(company.owner());
+    ui->label_companyAddress->setText(company.address());
+    ui->label_companyPhoneNum->setText(company.phoneNum());
+    ui->label_companyAccount->setText(company.bankAccount());
 
-    ui->label_companyName->setText(name);
-    ui->label_companyBlNum->setText(blNum);
-    ui->label_companyOwner->setText(owner);
-    ui->label_companyAddress->setText(address);
-    ui->label_companyPhoneNum->setText(phoneNum);
-    ui->label_companyAccount->setText(bankAccount);
+    // job list update
+    QDate dateFrom = ui->dateEdit_company_from->date();
+    QDate dateTo = ui->dateEdit_company_to->date();
+
+    m_model_jobListForCompany->setPeriod(dateFrom, dateTo);
+    m_model_jobListForCompany->setCompany(company.blNum());
+    m_model_jobListForCompany->refresh();
 }
 
 void MainWindow::on_pushButton_workNew_clicked()
@@ -192,11 +197,13 @@ void MainWindow::on_pushButton_workNew_clicked()
     }
 
     _load_job_list(m_jobList);
-    _update_job_list();
+    _update_job_list_for_stat();
     m_model_jobListForStat->refresh();
 
     ui->tableView_jobListForStat->reset();
     ui->tableView_jobListForStat->setModel(m_model_jobListForStat);
+
+    _update_job_list();
 }
 
 void MainWindow::on_pushButton_removeJobForStat_clicked()
@@ -219,6 +226,53 @@ void MainWindow::on_pushButton_removeJobForStat_clicked()
 
     ui->tableView_jobListForStat->reset();
     ui->tableView_jobListForStat->setModel(m_model_jobListForStat);
+
+    _update_job_list();
+}
+
+void MainWindow::on_pushButton_refreshJobjist_clicked()
+{
+    _update_job_list_for_stat();
+}
+
+void MainWindow::on_pushButton_refreshJobListForCompany_clicked()
+{
+    _update_job_list_for_company();
+}
+
+void MainWindow::on_dateEdit_stat_from_editingFinished()
+{
+    _update_job_list_for_stat();
+}
+
+void MainWindow::on_dateEdit_stat_to_editingFinished()
+{
+    _update_job_list_for_stat();
+}
+
+void MainWindow::on_dateEdit_company_from_editingFinished()
+{
+    _update_job_list_for_company();
+}
+
+void MainWindow::on_dateEdit_company_to_editingFinished()
+{
+    _update_job_list_for_company();
+}
+
+void MainWindow::on_dateEdit_worker_from_editingFinished()
+{
+    _update_job_list_for_worker();
+}
+
+void MainWindow::on_dateEdit_worker_to_editingFinished()
+{
+    _update_job_list_for_worker();
+}
+
+void MainWindow::on_pushButton_refreshJobListForWorker_clicked()
+{
+    _update_job_list_for_worker();
 }
 
 void MainWindow::_load_worker_list(QList<Worker>& listValue)
@@ -243,12 +297,31 @@ void MainWindow::_load_company_list(QList<Company> &listValue)
     m_model_company->refresh();
 }
 
-void MainWindow::_update_job_list()
+void MainWindow::_update_job_list_for_stat()
 {
     QDate dateFrom = ui->dateEdit_stat_from->date();
     QDate dateTo = ui->dateEdit_stat_to->date();
 
     m_model_jobListForStat->setPeriod(dateFrom, dateTo);
+    m_model_jobListForStat->refresh();
+}
+
+void MainWindow::_update_job_list_for_company()
+{
+    QDate dateFrom = ui->dateEdit_company_from->date();
+    QDate dateTo = ui->dateEdit_company_to->date();
+
+    m_model_jobListForCompany->setPeriod(dateFrom, dateTo);
+    m_model_jobListForCompany->refresh();
+}
+
+void MainWindow::_update_job_list_for_worker()
+{
+    QDate dateFrom = ui->dateEdit_worker_from->date();
+    QDate dateTo = ui->dateEdit_worker_to->date();
+
+    m_model_jobListForWorker->setPeriod(dateFrom, dateTo);
+    m_model_jobListForWorker->refresh();
 }
 
 void MainWindow::_load_job_list(QList<Job> &listValue)
@@ -275,6 +348,10 @@ void MainWindow::_init_jobListPeriod()
 
     ui->dateEdit_stat_from->setDate(dateFrom);
     ui->dateEdit_stat_to->setDate(dateTo);
+    ui->dateEdit_company_from->setDate(dateFrom);
+    ui->dateEdit_company_to->setDate(dateTo);
+    ui->dateEdit_worker_from->setDate(dateFrom);
+    ui->dateEdit_worker_to->setDate(dateTo);
 }
 
 void MainWindow::_init_uiSizes()
@@ -292,7 +369,7 @@ void MainWindow::_init_uiSizes()
     }
 }
 
-void MainWindow::_connectToDB()
+void MainWindow::_refreshAllData()
 {
 #ifndef QT_DEBUG
     QString curPath = QDir::currentPath();
@@ -312,7 +389,9 @@ void MainWindow::_connectToDB()
     _update_job_list();
 }
 
-void MainWindow::on_pushButton_refreshJobjist_clicked()
+void MainWindow::_update_job_list()
 {
-    _update_job_list();
+    _update_job_list_for_stat();
+    _update_job_list_for_company();
+    _update_job_list_for_worker();
 }

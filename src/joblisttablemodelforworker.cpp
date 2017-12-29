@@ -14,40 +14,51 @@ JobListTableModelForWorker::JobListTableModelForWorker(QList<Job> &jobList, QLis
 {
 }
 
-void JobListTableModelForWorker::clearItems()
-{
-    m_itemList.clear();
-}
-
 void JobListTableModelForWorker::setWorker(QString rrNum)
 {
-    clearItems();
+    m_workerRRNum = rrNum;
+}
 
-    QList<Job> jobList;
-    if (!Util::jobListForWorker(jobList, m_jobList, rrNum)) {
+void JobListTableModelForWorker::setPeriod(QDate& from, QDate& to)
+{
+    if (from > to) {
         return;
     }
 
-    foreach (Job job, jobList) {
-        JobListTableModelForWorkerItem modelItem;
-
-        QString companyName = Util::findCompanyNameWithBlNum(m_companyList, job.companyBlNum());
-        int pay = Util::findWorkerPayWithRRNum(m_workerList, job.workerRRNum());
-        QDate date = job.date();
-
-        modelItem.setCompanyName(companyName);
-        modelItem.setPay(pay);
-        modelItem.setDate(date);
-
-        m_itemList.append(modelItem);
-    }
-
-    emit layoutChanged();
+    m_dateFrom = from;
+    m_dateTo = to;
 }
 
 int JobListTableModelForWorker::columnSize(ModelItemColumnIdx idx)
 {
     return s_model_item[idx].width;
+}
+
+void JobListTableModelForWorker::refresh()
+{
+    m_itemList.clear();
+    foreach (Job job, m_jobList) {
+        if (job.workerRRNum() != m_workerRRNum) {
+            continue;
+        }
+
+        if (!(job.date() >= m_dateFrom && job.date() <= m_dateTo)) {
+            continue;
+        }
+
+        QString companyName = Util::findCompanyNameWithBlNum(m_companyList, job.companyBlNum());
+        long long pay = Util::findWorkerPayWithRRNum(m_workerList, job.workerRRNum());
+        QDate date = job.date();
+
+        JobListTableModelForWorkerItem item;
+        item.setCompanyName(companyName);
+        item.setPay(pay);
+        item.setDate(date);
+
+        m_itemList.append(item);
+    }
+
+    emit layoutChanged();
 }
 
 QVariant JobListTableModelForWorker::headerData(int section, Qt::Orientation orientation, int role) const

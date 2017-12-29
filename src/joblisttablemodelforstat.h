@@ -31,7 +31,6 @@ public:
     JobListTableModelForStat(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList);
 
 public:
-    void clearItems();
     void setPeriod(QDate& from, QDate& to);
     int columnSize(ModelItemColumnIdx idx);
     QString companyBlNum(const QModelIndex &index);
