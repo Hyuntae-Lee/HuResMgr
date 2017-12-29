@@ -28,6 +28,7 @@ public:
     QString bankAccount();
     void setBankAccount(QString value);
     long long pay();
+    QString payStr();
     void setPay(long long value);
     bool operator ==(Worker &w) const;
 

@@ -104,11 +104,12 @@ void MainWindow::on_listView_worker_clicked(const QModelIndex &index)
 
     Worker worker = m_workerList.at(index.row());
 
-    ui->label_workerName->setText(worker.name());
-    ui->label_workerRrNum->setText(worker.rrNum());
-    ui->label_workerPhoneNum->setText(worker.phoneNum());
-    ui->label_workerAddr->setText(worker.address());
-    ui->label_workerMajor->setText(worker.majorStr());
+    ui->lineEdit_workerName->setText(worker.name());
+    ui->lineEdit_workerRRNum->setText(worker.rrNum());
+    ui->lineEdit_workerPhoneNum->setText(worker.phoneNum());
+    ui->lineEdit_workerAddress->setText(worker.address());
+    ui->lineEdit_workerMajor->setText(worker.majorStr());
+    ui->lineEdit_workerPay->setText(worker.payStr());
 
     QDate dateFrom = ui->dateEdit_worker_from->date();
     QDate dateTo = ui->dateEdit_worker_to->date();
@@ -273,6 +274,37 @@ void MainWindow::on_dateEdit_worker_to_editingFinished()
 void MainWindow::on_pushButton_refreshJobListForWorker_clicked()
 {
     _update_job_list_for_worker();
+}
+
+void MainWindow::on_pushButton_editApply_clicked()
+{
+    QString name = ui->lineEdit_workerName->text();
+    QString majorStr = ui->lineEdit_workerMajor->text();
+    QString rrNum = ui->lineEdit_workerRRNum->text();
+    QString phoneNum = ui->lineEdit_workerPhoneNum->text();
+    QString address = ui->lineEdit_workerAddress->text();
+    QString account = ui->lineEdit_workerAccount->text();
+    QString payStr = ui->lineEdit_workerPay->text();
+    int pay = 0;
+
+    bool ok;
+    pay = payStr.toInt(&ok);
+    if (!ok) {
+        pay = 0;
+    }
+
+    if (!m_dbHdlr->updateWorker(rrNum, name, majorStr, phoneNum, address, account, pay, "")) {
+        QMessageBox::critical(this, tr("Error"), tr("Cannot update worker data!!"), tr("Ok"));
+        return;
+    }
+
+    _load_worker_list(m_workerList);
+    m_model_worker->refresh();
+
+    ui->listView_worker->reset();
+    ui->listView_worker->setModel(m_model_worker);
+
+    _update_job_list();
 }
 
 void MainWindow::_load_worker_list(QList<Worker>& listValue)

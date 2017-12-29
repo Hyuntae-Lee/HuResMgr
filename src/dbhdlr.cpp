@@ -103,6 +103,26 @@ bool DBHdlr::addWorker(Worker worker)
     return true;
 }
 
+bool DBHdlr::updateWorker(QString rrNum, QString name, QString majorStr, QString phoneNum,
+                          QString address, QString account, long long pay, QString picturePath)
+{
+    if (!m_db.isOpen()) {
+        return false;
+    }
+
+    QString queryStr = QString("UPDATE Worker SET name = '%2', major = '%3', picture_path = '%4', address = '%5', phone_num = '%6', bank_account = '%7', pay = '%8' WHERE rr_num = '%1'")
+            .arg(rrNum).arg(name).arg(majorStr).arg(picturePath).arg(address).arg(phoneNum)
+            .arg(account).arg(QString("%1").arg(pay));
+
+    QSqlQuery query(queryStr);
+    if(!query.isActive()) {
+        qWarning() << "updateWorker - ERROR: " << query.lastError().text();
+        return false;
+    }
+
+    return true;
+}
+
 bool DBHdlr::removeWorker(QString rrNum)
 {
     if (!m_db.isOpen()) {

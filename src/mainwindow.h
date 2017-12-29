@@ -43,6 +43,7 @@ private slots:
     void on_dateEdit_worker_from_editingFinished();
     void on_dateEdit_worker_to_editingFinished();
     void on_pushButton_refreshJobListForWorker_clicked();
+    void on_pushButton_editApply_clicked();
 
 private:
     void _load_worker_list(QList<Worker> &listValue);

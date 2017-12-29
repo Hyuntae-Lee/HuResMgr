@@ -95,6 +95,11 @@ long long Worker::pay()
     return m_pay;
 }
 
+QString Worker::payStr()
+{
+    return QString("%1").arg(m_pay);
+}
+
 void Worker::setPay(long long value)
 {
     m_pay = value;
