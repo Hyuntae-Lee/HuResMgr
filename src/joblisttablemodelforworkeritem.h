@@ -10,6 +10,8 @@ public:
     JobListTableModelForWorkerItem();
 
 public:
+    int id();
+    void setId(int value);
     long long pay();
     void setPay(long long value);
     QString companyName();
@@ -18,6 +20,7 @@ public:
     void setDate(QDate& date);
 
 private:
+    int m_id;
     long long m_pay;
     QString m_companyName;
     QDate m_date;

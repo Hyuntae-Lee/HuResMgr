@@ -13,9 +13,10 @@ class JobListTableModelForWorker : public QAbstractTableModel
 
 public:
     typedef enum {
-        COL_COMPANYNAME = 0,
-        COL_PAY,
+        COL_NO = 0,
         COL_DATE,
+        COL_COMPANYNAME,
+        COL_PAY,
         COL_NUM
     } ModelItemColumnIdx;
 
@@ -33,7 +34,7 @@ public:
     void setPeriod(QDate& from, QDate& to);
     int columnSize(ModelItemColumnIdx idx);
     void refresh();
-    void exportToExcelFile(QString path);
+    void exportToExcelFile();
 
 public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

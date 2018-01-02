@@ -1,13 +1,20 @@
 #include "joblisttablemodelforworker.h"
 #include "util.h"
 #include <QMessageBox>
+#include <QDir>
 #include "xlsxdocument.h"
+#include <QDesktopServices>
+#include <QProcess>
+#include <QUrl>
+
+#define EXPORT_TEMPLATE_PATH_STAT "/data/report_template.xlsx"
 
 static JobListTableModelForWorker::ModelItem_t s_model_item[] = {
     /*                    idx                    , label , size */
+    { JobListTableModelForWorker::COL_NO         , "순번", 50   },
+    { JobListTableModelForWorker::COL_DATE       , "일자", 100  },
     { JobListTableModelForWorker::COL_COMPANYNAME, "업체", 150  },
     { JobListTableModelForWorker::COL_PAY        , "일당", 150  },
-    { JobListTableModelForWorker::COL_DATE       , "일자", 100  },
 };
 
 JobListTableModelForWorker::JobListTableModelForWorker(QList<Job> &jobList, QList<Worker>& workerList, QList<Company>& companyList)
@@ -52,6 +59,7 @@ void JobListTableModelForWorker::refresh()
         QDate date = job.date();
 
         JobListTableModelForWorkerItem item;
+        item.setId(job.id());
         item.setCompanyName(companyName);
         item.setPay(pay);
         item.setDate(date);
@@ -62,18 +70,32 @@ void JobListTableModelForWorker::refresh()
     emit layoutChanged();
 }
 
-void JobListTableModelForWorker::exportToExcelFile(QString path)
+void JobListTableModelForWorker::exportToExcelFile()
 {
-    // get contents
+#ifndef QT_DEBUG
+    QString curPath = QDir::currentPath();
+#else
+    QString curPath = "D:/projects/etc/HuResMgr";
+#endif // QT_DEBUG
+
+    // perpare contents
     QString workerName = Util::findWorkerNameWithRRNum(m_workerList, m_workerRRNum);
     QString dateStrFrom = m_dateFrom.toString(Qt::DefaultLocaleShortDate);
     QString dateStrTo = m_dateTo.toString(Qt::DefaultLocaleShortDate);
-
-    // compose title
     QString title = QString("%1 업무내역 (%2 ~ %3)").arg(workerName).arg(dateStrFrom).arg(dateStrTo);
 
-    // save to excel
-    QXlsx::Document xlsx;
+    // save to excel file
+    QString templatePath = curPath + EXPORT_TEMPLATE_PATH_STAT;
+    QString newFilePath = QDir::homePath() + "/" + title + ".xlsx";
+
+    // - copy template file to home directory
+    if (!QFile::copy(templatePath, newFilePath)) {
+        QMessageBox::critical(NULL, tr("Error"), tr("Cannot save template file!!"), tr("Ok"));
+        return;
+    }
+
+    // - open new file
+    QXlsx::Document xlsx(newFilePath);
 
     // title
     xlsx.write(1, 1, title);
@@ -94,7 +116,10 @@ void JobListTableModelForWorker::exportToExcelFile(QString path)
         }
     }
     // - save to file
-    xlsx.saveAs(path);
+    xlsx.saveAs(newFilePath);
+
+    // - open file
+    QDesktopServices::openUrl(QUrl(newFilePath.prepend("file:///")));
 }
 
 QVariant JobListTableModelForWorker::headerData(int section, Qt::Orientation orientation, int role) const
@@ -146,7 +171,10 @@ QString JobListTableModelForWorker::_getItemData(int row, int col) const
 {
     JobListTableModelForWorkerItem item = m_itemList[row];
 
-    if (col == COL_DATE) {
+    if (col == COL_NO) {
+        return QString("%1").arg(item.id());
+    }
+    else if (col == COL_DATE) {
         return item.date().toString(Qt::DefaultLocaleLongDate);
     }
     else if (col == COL_COMPANYNAME) {

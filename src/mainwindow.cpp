@@ -12,7 +12,6 @@
 #include "joblisttablemodelforcompany.h"
 #include "workerlistmodel.h"
 #include "companylistmodel.h"
-#include <QFileDialog>
 
 #define DB_FILE_PATH "/data/main.db"
 
@@ -348,16 +347,11 @@ void MainWindow::on_pushButton_companyEditApply_clicked()
 
 void MainWindow::on_pushButton_exportJobListForWorker_clicked()
 {
-    QString curDir = QDir::currentPath();
+    m_model_jobListForWorker->exportToExcelFile();
+}
 
-    // get save file path
-    QString filePath = QFileDialog::getSaveFileName(this, tr("Save file"), curDir, tr("Excel files (*.xlsx)"));
-    if (!filePath.length()) {
-        return;
-    }
-
-    // export
-    m_model_jobListForWorker->exportToExcelFile(filePath);
+void MainWindow::on_pushButton_exportForStat_clicked()
+{
 }
 
 void MainWindow::_load_worker_list(QList<Worker>& listValue)

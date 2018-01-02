@@ -44,6 +44,19 @@ QString Util::findWorkerNameWithRRNum(QList<Worker> list, QString rrNum)
     return 0;
 }
 
+int Util::findWorkerIdWithRRNum(QList<Worker> list, QString rrNum)
+{
+    foreach (Worker worker, list) {
+        if (worker.rrNum() != rrNum) {
+            continue;
+        }
+
+        return worker.idNum();
+    }
+
+    return 0;
+}
+
 bool Util::jobListForWorker(QList<Job>& out_list, QList<Job>& list, QString rrNum)
 {
     if (list.count() <= 0) {

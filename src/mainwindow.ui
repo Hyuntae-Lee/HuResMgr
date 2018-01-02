@@ -45,7 +45,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_worker">
        <attribute name="title">
@@ -867,6 +867,13 @@
               </property>
               <property name="text">
                <string>삭제</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_exportForStat">
+              <property name="text">
+               <string>출력</string>
               </property>
              </widget>
             </item>
