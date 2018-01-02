@@ -33,12 +33,16 @@ public:
     void setPeriod(QDate& from, QDate& to);
     int columnSize(ModelItemColumnIdx idx);
     void refresh();
+    void exportToExcelFile(QString path);
 
 public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+private:
+    QString _getItemData(int row, int col) const;
 
 private:
     QList<JobListTableModelForWorkerItem> m_itemList;

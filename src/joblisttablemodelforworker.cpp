@@ -1,6 +1,7 @@
 #include "joblisttablemodelforworker.h"
 #include "util.h"
 #include <QMessageBox>
+#include "xlsxdocument.h"
 
 static JobListTableModelForWorker::ModelItem_t s_model_item[] = {
     /*                    idx                    , label , size */
@@ -61,6 +62,41 @@ void JobListTableModelForWorker::refresh()
     emit layoutChanged();
 }
 
+void JobListTableModelForWorker::exportToExcelFile(QString path)
+{
+    // get contents
+    QString workerName = Util::findWorkerNameWithRRNum(m_workerList, m_workerRRNum);
+    QString dateStrFrom = m_dateFrom.toString(Qt::DefaultLocaleShortDate);
+    QString dateStrTo = m_dateTo.toString(Qt::DefaultLocaleShortDate);
+
+    // compose title
+    QString title = QString("%1 업무내역 (%2 ~ %3)").arg(workerName).arg(dateStrFrom).arg(dateStrTo);
+
+    // save to excel
+    QXlsx::Document xlsx;
+
+    // title
+    xlsx.write(1, 1, title);
+    // - header
+    for (int col = 0; col < columnCount(); col++) {
+        int excel_col = col + 1;
+        QString headerStr = s_model_item[col].label;
+        xlsx.write(2, excel_col, headerStr);
+    }
+    // - contents
+    for (int row = 0; row < rowCount(); row ++) {
+        for (int col = 0; col < columnCount(); col++) {
+            QString strTmp = _getItemData(row, col);
+
+            int excel_row = row + 3;
+            int excel_col = col + 1;
+            xlsx.write(excel_row, excel_col, strTmp);
+        }
+    }
+    // - save to file
+    xlsx.saveAs(path);
+}
+
 QVariant JobListTableModelForWorker::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole) {
@@ -100,20 +136,26 @@ QVariant JobListTableModelForWorker::data(const QModelIndex &index, int role) co
     }
 
     if (role == Qt::DisplayRole) {
-        JobListTableModelForWorkerItem item = m_itemList[index.row()];
-
-        if (index.column() == COL_DATE) {
-            return item.date().toString(Qt::DefaultLocaleLongDate);
-        }
-
-        if (index.column() == COL_COMPANYNAME) {
-            return item.companyName();
-        }
-
-        if (index.column() == COL_PAY) {
-            return QString("%1").arg(item.pay());
-        }
+        return _getItemData(index.row(), index.column());
     }
 
     return QVariant();
+}
+
+QString JobListTableModelForWorker::_getItemData(int row, int col) const
+{
+    JobListTableModelForWorkerItem item = m_itemList[row];
+
+    if (col == COL_DATE) {
+        return item.date().toString(Qt::DefaultLocaleLongDate);
+    }
+    else if (col == COL_COMPANYNAME) {
+        return item.companyName();
+    }
+    else if (col == COL_PAY) {
+        return QString("%1").arg(item.pay());
+    }
+    else {
+        return "";
+    }
 }
