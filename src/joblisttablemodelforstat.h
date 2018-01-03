@@ -13,11 +13,10 @@ class JobListTableModelForStat : public QAbstractTableModel
 
 public:
     typedef enum {
-        COL_NO = 0,
+        COL_DATE = 0,
         COL_COMPANYNAME,
         COL_WORKERNAME,
         COL_PAY,
-        COL_DATE,
         COL_NUM
     } ModelItemColumnIdx;
 
@@ -37,7 +36,7 @@ public:
     QString workerRRNum(const QModelIndex &index);
     QDate workDate(const QModelIndex &index);
     void refresh();
-    void exportToExcelFile(QString path);
+    void exportToExcelFile();
 
 public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -47,6 +46,9 @@ public:
 
 private:
     QString _getItemData(int row, int col) const;
+    QString _getExportTitle();
+    QString _getExportFilePath(QString defaultFileName);
+    void _fillExportFile(QString filePath, QString title);
 
 private:
     QList<JobListTableModelForStatItem> m_itemList;

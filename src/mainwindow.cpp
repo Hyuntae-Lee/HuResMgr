@@ -352,6 +352,12 @@ void MainWindow::on_pushButton_exportJobListForWorker_clicked()
 
 void MainWindow::on_pushButton_exportForStat_clicked()
 {
+    m_model_jobListForStat->exportToExcelFile();
+}
+
+void MainWindow::on_pushButton_exportJobListForCompany_clicked()
+{
+    m_model_jobListForCompany->exportToExcelFile();
 }
 
 void MainWindow::_load_worker_list(QList<Worker>& listValue)
@@ -435,7 +441,7 @@ void MainWindow::_init_jobListPeriod()
 
 void MainWindow::_init_uiSizes()
 {
-    // job list table for selected period
+    // job list table
     for (int i = 0; i < JobListTableModelForStat::COL_NUM; i++) {
         JobListTableModelForStat::ModelItemColumnIdx idx = (JobListTableModelForStat::ModelItemColumnIdx)i;
         ui->tableView_jobListForStat->setColumnWidth(idx, m_model_jobListForStat->columnSize(idx));
@@ -445,6 +451,12 @@ void MainWindow::_init_uiSizes()
     for (int i = 0; i < JobListTableModelForWorker::COL_NUM; i++) {
         JobListTableModelForWorker::ModelItemColumnIdx idx = (JobListTableModelForWorker::ModelItemColumnIdx)i;
         ui->tableView_jobListForWorker->setColumnWidth(idx, m_model_jobListForWorker->columnSize(idx));
+    }
+
+    // job list table for selected company
+    for (int i = 0; i < JobListTableModelForCompany::COL_NUM; i++) {
+        JobListTableModelForCompany::ModelItemColumnIdx idx = (JobListTableModelForCompany::ModelItemColumnIdx)i;
+        ui->tableView_jobListForCompany->setColumnWidth(idx, m_model_jobListForCompany->columnSize(idx));
     }
 }
 

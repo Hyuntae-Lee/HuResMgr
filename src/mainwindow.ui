@@ -45,7 +45,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_worker">
        <attribute name="title">
@@ -372,7 +372,7 @@
             <item>
              <widget class="QPushButton" name="pushButton_exportJobListForWorker">
               <property name="text">
-               <string>엑셀출력</string>
+               <string>출력</string>
               </property>
              </widget>
             </item>
@@ -716,6 +716,13 @@
              <widget class="QPushButton" name="pushButton_refreshJobListForCompany">
               <property name="text">
                <string>적용</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_exportJobListForCompany">
+              <property name="text">
+               <string>출력</string>
               </property>
              </widget>
             </item>

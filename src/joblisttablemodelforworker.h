@@ -13,8 +13,7 @@ class JobListTableModelForWorker : public QAbstractTableModel
 
 public:
     typedef enum {
-        COL_NO = 0,
-        COL_DATE,
+        COL_DATE = 0,
         COL_COMPANYNAME,
         COL_PAY,
         COL_NUM
@@ -44,6 +43,9 @@ public:
 
 private:
     QString _getItemData(int row, int col) const;
+    QString _getExportTitle();
+    QString _getExportFilePath(QString defaultFileName);
+    void _fillExportFile(QString filePath, QString title);
 
 private:
     QList<JobListTableModelForWorkerItem> m_itemList;

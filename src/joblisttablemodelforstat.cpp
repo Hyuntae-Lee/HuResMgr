@@ -1,14 +1,19 @@
 #include "joblisttablemodelforstat.h"
 #include "xlsxdocument.h"
 #include "util.h"
+#include <QDesktopServices>
+#include <QUrl>
+#include <QFileDialog>
+#include <QMessageBox>
+
+#define EXPORT_TEMPLATE_PATH_STAT "/data/report_template.xlsx"
 
 static JobListTableModelForStat::ModelItem_t s_model_item[] = {
     /*                   idx                   , label , size  */
-    { JobListTableModelForStat::COL_NO         , "순번", 50    },
+    { JobListTableModelForStat::COL_DATE       , "일자", 250   },
     { JobListTableModelForStat::COL_COMPANYNAME, "업체", 150   },
-    { JobListTableModelForStat::COL_WORKERNAME , "인재", 100   },
+    { JobListTableModelForStat::COL_WORKERNAME , "인력", 100   },
     { JobListTableModelForStat::COL_PAY        , "일당", 150   },
-    { JobListTableModelForStat::COL_DATE       , "일자", 100   },
 };
 
 JobListTableModelForStat::JobListTableModelForStat(QList<Job>& jobList, QList<Worker>& workerList, QList<Company>& companyList)
@@ -75,38 +80,19 @@ void JobListTableModelForStat::refresh()
     emit layoutChanged();
 }
 
-void JobListTableModelForStat::exportToExcelFile(QString path)
+void JobListTableModelForStat::exportToExcelFile()
 {
-    // get contents
-    QString dateStrFrom = m_dateFrom.toString(Qt::DefaultLocaleShortDate);
-    QString dateStrTo = m_dateTo.toString(Qt::DefaultLocaleShortDate);
-
-    // compose title
-    QString title = QString("업무내역 (%1 ~ %2)").arg(dateStrFrom).arg(dateStrTo);
-
-    // save to excel
-    QXlsx::Document xlsx;
-
-    // title
-    xlsx.write(1, 1, title);
-    // - header
-    for (int col = 0; col < columnCount(); col++) {
-        int excel_col = col + 1;
-        QString headerStr = s_model_item[col].label;
-        xlsx.write(2, excel_col, headerStr);
+    // fill and save
+    QString title = _getExportTitle();
+    QString excelFilePath = _getExportFilePath(title);
+    if (!excelFilePath.length()) {
+        return;
     }
-    // - contents
-    for (int row = 0; row < rowCount(); row ++) {
-        for (int col = 0; col < columnCount(); col++) {
-            QString strTmp = _getItemData(row, col);
 
-            int excel_row = row + 3;
-            int excel_col = col + 1;
-            xlsx.write(excel_row, excel_col, strTmp);
-        }
-    }
-    // - save to file
-    xlsx.saveAs(path);
+    _fillExportFile(excelFilePath, title);
+
+    // open
+    QDesktopServices::openUrl(QUrl(excelFilePath.prepend("file:///")));
 }
 
 QVariant JobListTableModelForStat::headerData(int section, Qt::Orientation orientation, int role) const
@@ -158,10 +144,7 @@ QString JobListTableModelForStat::_getItemData(int row, int col) const
 {
     JobListTableModelForStatItem item = m_itemList[row];
 
-    if (col == COL_NO) {
-        return QString("%1").arg(item.id());
-    }
-    else if (col == COL_COMPANYNAME) {
+    if (col == COL_COMPANYNAME) {
         return item.companyName();
     }
     else if (col == COL_WORKERNAME) {
@@ -176,4 +159,67 @@ QString JobListTableModelForStat::_getItemData(int row, int col) const
     else {
         return "";
     }
+}
+
+QString JobListTableModelForStat::_getExportTitle()
+{
+    QString dateStrFrom = m_dateFrom.toString(Qt::DefaultLocaleShortDate);
+    QString dateStrTo = m_dateTo.toString(Qt::DefaultLocaleShortDate);
+
+    return QString("업무내역 (%2 ~ %3)").arg(dateStrFrom).arg(dateStrTo);
+}
+
+QString JobListTableModelForStat::_getExportFilePath(QString defaultFileName)
+{
+#ifndef QT_DEBUG
+    QString curPath = QDir::currentPath();
+#else
+    QString curPath = "D:/projects/etc/HuResMgr";
+#endif // QT_DEBUG
+
+    // get save directory
+    QString newFilePathDefault = QDir::homePath() + "/" + defaultFileName + ".xlsx";
+    QString newFilePath = QFileDialog::getSaveFileName(NULL, tr("저장할 폴더 선택"), newFilePathDefault, tr("Excel File (*.xlsx)"));
+    if (!newFilePath.length()) {
+        return "";
+    }
+    if (QFile::exists(newFilePath)) {
+        QFile::remove(newFilePath);
+    }
+
+    // copy template file to home directory
+    QString templatePath = curPath + EXPORT_TEMPLATE_PATH_STAT;
+    if (!QFile::copy(templatePath, newFilePath)) {
+        QMessageBox::critical(NULL, tr("Error"), tr("Cannot save template file!!"), tr("Ok"));
+        return "";
+    }
+
+    return newFilePath;
+}
+
+void JobListTableModelForStat::_fillExportFile(QString filePath, QString title)
+{
+    // open file
+    QXlsx::Document xlsx(filePath);
+
+    // title
+    xlsx.write(1, 1, title);
+    // header
+    for (int col = 0; col < columnCount(); col++) {
+        int excel_col = col + 1;
+        QString headerStr = s_model_item[col].label;
+        xlsx.write(2, excel_col, headerStr);
+    }
+    // contents
+    for (int row = 0; row < rowCount(); row ++) {
+        for (int col = 0; col < columnCount(); col++) {
+            QString strTmp = _getItemData(row, col);
+
+            int excel_row = row + 3;
+            int excel_col = col + 1;
+            xlsx.write(excel_row, excel_col, strTmp);
+        }
+    }
+    // save
+    xlsx.save();
 }
