@@ -6,6 +6,7 @@
 #include <QDesktopServices>
 #include <QProcess>
 #include <QUrl>
+#include <QFileDialog>
 
 #define EXPORT_TEMPLATE_PATH_STAT "/data/report_template.xlsx"
 
@@ -85,10 +86,15 @@ void JobListTableModelForWorker::exportToExcelFile()
     QString title = QString("%1 업무내역 (%2 ~ %3)").arg(workerName).arg(dateStrFrom).arg(dateStrTo);
 
     // save to excel file
-    QString templatePath = curPath + EXPORT_TEMPLATE_PATH_STAT;
-    QString newFilePath = QDir::homePath() + "/" + title + ".xlsx";
 
+    // - get save directory
+    QString newFilePathDefault = QDir::homePath() + "/" + title + ".xlsx";
+    QString newFilePath = QFileDialog::getSaveFileName(NULL, tr("저장할 폴더 선택"), newFilePathDefault, tr("Excel File (*.xlsx)"));
+    if (!newFilePath.length()) {
+        return;
+    }
     // - copy template file to home directory
+    QString templatePath = curPath + EXPORT_TEMPLATE_PATH_STAT;
     if (!QFile::copy(templatePath, newFilePath)) {
         QMessageBox::critical(NULL, tr("Error"), tr("Cannot save template file!!"), tr("Ok"));
         return;
