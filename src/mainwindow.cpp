@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_model_jobListForCompany = new JobListTableModelForCompany(m_jobList, m_workerList, m_companyList);
 
     ui->setupUi(this);
+    setWindowTitle(tr("흥부 개발 인적 자원 관리 프로그램"));
 
     ui->listView_worker->setModel(m_model_worker);
     ui->listView_company->setModel(m_model_company);
@@ -435,12 +436,20 @@ void MainWindow::_init_jobListPeriod()
     QDate dateTo = QDate::currentDate();
 
     QDate dateFrom;
-    QDate dateTmp = QDate(dateTo.year(), dateTo.month() - 1, 1);
-    if (dateTo.day() > dateTmp.daysInMonth()) {
-        dateFrom = QDate(dateTo.year(), dateTo.month() - 1, dateTmp.daysInMonth());
+    if (dateTo.month() == 1) {
+        int year = dateTo.year() - 1;
+        int month = 12;
+        int day = dateTo.day();
+        dateFrom.setDate(year, month, day);
     }
     else {
-        dateFrom = QDate(dateTo.year(), dateTo.month() - 1, dateTo.day());
+        QDate dateTmp = QDate(dateTo.year(), dateTo.month() - 1, 1);
+        if (dateTo.day() > dateTmp.daysInMonth()) {
+            dateFrom = QDate(dateTo.year(), dateTo.month() - 1, dateTmp.daysInMonth());
+        }
+        else {
+            dateFrom = QDate(dateTo.year(), dateTo.month() - 1, dateTo.day());
+        }
     }
 
     ui->dateEdit_stat_from->setDate(dateFrom);

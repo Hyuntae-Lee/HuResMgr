@@ -8,6 +8,7 @@ DialogNewJob::DialogNewJob(QList<Worker> &workerList, QList<Company> &companyLis
     ui(new Ui::DialogNewJob)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("업무 추가"));
 
     m_model_workerList = new WorkerListModelForNewJob(m_workerList);
     m_model_companyList = new CompanyListModelForNewJob(m_companyList);

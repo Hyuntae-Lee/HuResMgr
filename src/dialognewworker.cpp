@@ -7,6 +7,7 @@ DialogNewWorker::DialogNewWorker(QWidget *parent) :
     ui(new Ui::DialogNewWorker)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("인력 추가"));
 }
 
 DialogNewWorker::~DialogNewWorker()

@@ -7,6 +7,7 @@ DialogNewCompany::DialogNewCompany(QWidget *parent) :
     ui(new Ui::DialogNewCompany)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("업체 추가"));
 }
 
 DialogNewCompany::~DialogNewCompany()
