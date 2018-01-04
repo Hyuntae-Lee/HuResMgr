@@ -52,7 +52,8 @@ HEADERS  += mainwindow.h \
     workerlistmodel.h \
     companylistmodel.h \
     joblisttablemodelforcompany.h \
-    joblisttablemodelforcompanyitem.h
+    joblisttablemodelforcompanyitem.h \
+    version.h
 
 FORMS    += mainwindow.ui \
     dialognewworker.ui \

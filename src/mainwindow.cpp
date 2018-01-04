@@ -12,6 +12,7 @@
 #include "joblisttablemodelforcompany.h"
 #include "workerlistmodel.h"
 #include "companylistmodel.h"
+#include "version.h"
 
 #define DB_FILE_PATH "/data/main.db"
 
@@ -362,7 +363,8 @@ void MainWindow::on_pushButton_exportJobListForCompany_clicked()
 
 void MainWindow::on_pushButton_about_clicked()
 {
-    QMessageBox::about(this, tr("About Human Resource Manager"), tr("김우진 외 사용 금지"));
+    QString versionStr = QString("v%1.%2.%3").arg(VER_A).arg(VER_B).arg(VER_C);
+    QMessageBox::about(this, QString("HuResMgr %1").arg(versionStr), tr("김우진 외 사용 금지"));
 }
 
 void MainWindow::on_pushButton_aboutQt_clicked()

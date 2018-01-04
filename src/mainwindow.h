@@ -48,9 +48,7 @@ private slots:
     void on_pushButton_exportJobListForWorker_clicked();
     void on_pushButton_exportForStat_clicked();
     void on_pushButton_exportJobListForCompany_clicked();
-
     void on_pushButton_about_clicked();
-
     void on_pushButton_aboutQt_clicked();
 
 private:
