@@ -45,7 +45,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 private:
-    QString _getItemData(int row, int col) const;
+    QVariant _getItemData(int row, int col) const;
     QString _getExportTitle();
     QString _getExportFilePath(QString defaultFileName);
     void _fillExportFile(QString filePath, QString title);

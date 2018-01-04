@@ -360,6 +360,16 @@ void MainWindow::on_pushButton_exportJobListForCompany_clicked()
     m_model_jobListForCompany->exportToExcelFile();
 }
 
+void MainWindow::on_pushButton_about_clicked()
+{
+    QMessageBox::about(this, tr("About Human Resource Manager"), tr("김우진 외 사용 금지"));
+}
+
+void MainWindow::on_pushButton_aboutQt_clicked()
+{
+    QMessageBox::aboutQt(this);
+}
+
 void MainWindow::_load_worker_list(QList<Worker>& listValue)
 {
     listValue.clear();

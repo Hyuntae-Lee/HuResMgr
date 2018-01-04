@@ -148,7 +148,7 @@ QVariant JobListTableModelForCompany::data(const QModelIndex &index, int role) c
     return QVariant();
 }
 
-QString JobListTableModelForCompany::_getItemData(int row, int col) const
+QVariant JobListTableModelForCompany::_getItemData(int row, int col) const
 {
     JobListTableModelForCompanyItem item = m_itemList[row];
 
@@ -156,7 +156,7 @@ QString JobListTableModelForCompany::_getItemData(int row, int col) const
         return item.workerName();
     }
     else if (col == COL_PAY) {
-        return QString("%1").arg(item.pay());
+        return item.pay();
     }
     else if (col == COL_DATE) {
         return item.date().toString(Qt::DefaultLocaleLongDate);
@@ -219,11 +219,11 @@ void JobListTableModelForCompany::_fillExportFile(QString filePath, QString titl
     // contents
     for (int row = 0; row < rowCount(); row ++) {
         for (int col = 0; col < columnCount(); col++) {
-            QString strTmp = _getItemData(row, col);
+            QVariant dataTmp = _getItemData(row, col);
 
             int excel_row = row + 3;
             int excel_col = col + 1;
-            xlsx.write(excel_row, excel_col, strTmp);
+            xlsx.write(excel_row, excel_col, dataTmp);
         }
     }
     // save

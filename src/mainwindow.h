@@ -49,6 +49,10 @@ private slots:
     void on_pushButton_exportForStat_clicked();
     void on_pushButton_exportJobListForCompany_clicked();
 
+    void on_pushButton_about_clicked();
+
+    void on_pushButton_aboutQt_clicked();
+
 private:
     void _load_worker_list(QList<Worker> &listValue);
     void _load_company_list(QList<Company> &listValue);
